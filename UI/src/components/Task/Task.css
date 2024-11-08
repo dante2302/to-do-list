@@ -1,0 +1,12 @@
+.task, .date-time-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.date-time-container{
+    gap: 10px;
+}
+.task{
+    justify-content: space-between;
+}
