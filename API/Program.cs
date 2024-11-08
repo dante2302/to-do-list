@@ -2,6 +2,7 @@ using API;
 using API.Data;
 using API.Endpoints;
 using API.Services;
+using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

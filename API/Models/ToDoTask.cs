@@ -27,6 +27,7 @@ public class ToDoTask
     public int Id { get; set; }
 
     [Required(AllowEmptyStrings = false)]
+    [MaxLength(70)]
     public required string Title { get; set; }
 
     [FutureDate]
