@@ -7,6 +7,11 @@
 .date-time-container{
     gap: 10px;
 }
+
 .task{
     justify-content: space-between;
+}
+
+.task input{
+    transform: scale(1.5);
 }

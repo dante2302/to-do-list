@@ -1,0 +1,7 @@
+:root{
+    --ff-main: "Poppins"
+}
+
+#root{
+    font-family: var(--ff-main);
+}

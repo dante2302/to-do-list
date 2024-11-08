@@ -1,35 +1,37 @@
 import ToDoTask from "../../interfaces/ToDoTask";
+import { UpdateTask } from "../../interfaces/UpdateTask";
+import * as toDoService from "../../services/toDoService";
 import "./Task.css";
 
 interface TaskProps
 {
     taskData: ToDoTask;
-    setTaskData: React.Dispatch<React.SetStateAction<ToDoTask>>;
+    updateTask: UpdateTask;
+    setChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Task({ taskData, setTaskData }: TaskProps)
+export default function Task({ taskData, updateTask, setChange }: TaskProps)
 {
-    const toggleCompleted = () => 
+    const toggleCompleted = async () => 
     {
-        setTaskData(prev => ({
-            ...prev, 
-            isCompleted: !prev.isCompleted
-        }))
+        const updated = {...taskData, isCompleted: !taskData.isCompleted};
+        updateTask(updated);
+        await toDoService.update(updated);
     }
-
+    console.log(typeof taskData.dueDate)
     return (
         <div className="task">
             <form>
                 <input 
                     type="checkbox" 
                     checked={taskData.isCompleted} 
-                    onChange={toggleCompleted}
+                    onChange={async () => await toggleCompleted()}
                 />
             </form>
             <h2>{taskData.title}</h2>
             <div className="date-time-container">
-                <span>{taskData.dueDate.toLocaleDateString()}</span>
-                <span>{taskData.dueDate.toLocaleTimeString()}</span>
+                {/* <span>{taskData.dueDate.toLocaleDateString()}</span> */}
+                <span>{taskData.dueDate.toLocaleString()}</span>
             </div>
         </div>
     );

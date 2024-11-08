@@ -53,6 +53,7 @@ export async function getAllByStatus(status: TaskStatus)
     {
         const response = await request.get(`${TODO_URL}/${status}`);
         const data: ToDoTask[] = await response.json();
+
         return {
             data,
             status: STATUS.Success
@@ -62,7 +63,6 @@ export async function getAllByStatus(status: TaskStatus)
     {
         console.log(e);
         return { 
-            data: null, 
             status: STATUS.Error 
         };
     }
@@ -72,7 +72,7 @@ export async function update(updatedTodo: ToDoTask)
 {
     try
     {
-        const response = await request.put(`${TODO_URL}`, updatedTodo);
+        const response = await request.put(`${TODO_URL}/${updatedTodo.id}`, updatedTodo);
         const data = await response.json();
 
         if(!response.ok)
