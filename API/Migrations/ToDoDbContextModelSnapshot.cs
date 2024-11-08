@@ -30,7 +30,7 @@ namespace API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsCompleted")
@@ -38,8 +38,7 @@ namespace API.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("character varying(70)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

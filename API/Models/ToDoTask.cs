@@ -4,7 +4,10 @@ namespace API.Models;
 
 internal class FutureDateAttribute : ValidationAttribute
 {
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    // value needs to be an object? to override the default
+    // otherwise it wouldve been a DateTime
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (value is null)
             return ValidationResult.Success;
@@ -21,9 +24,9 @@ internal class FutureDateAttribute : ValidationAttribute
 public class ToDoTask
 {
     [Key]
-    public required int Id { get; set; }
+    public int Id { get; set; }
 
-    [MaxLength(70)]
+    [Required(AllowEmptyStrings = false)]
     public required string Title { get; set; }
 
     [FutureDate]
