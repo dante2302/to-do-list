@@ -1,0 +1,15 @@
+.modal, .overlay{
+  width:100vw;
+  height:100vh;
+  inset: 0;
+  position:fixed;
+}
+
+.modal{
+  z-index:2;
+}
+
+.overlay{
+  background-color: darkgrey;
+  opacity:.4;
+}

@@ -1,0 +1,76 @@
+.add-form{
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.title-input{
+    padding-block: 10px;
+    padding-inline: 10px 20px;
+}
+
+.input-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 30px;
+}
+
+.input-wrap input{
+    text-align: center;
+}
+
+.input-wrap label{
+    font-size: 18px;
+}
+
+.add-form input:focus, .add-form input:focus-visible, .add-form input:focus-within{
+    outline: none;
+    border: 1px solid var(--clr-accent-blue);
+    color: var(--clr-accent-blue);
+    font-weight: 600;
+}
+
+.title-input,.date-input{
+    border-radius: 5px;
+    border: 1px solid black 
+}
+
+.date-input{
+    caret-color: transparent;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.add-form>.button-container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-block: 30px;
+}
+
+.add-form>.button-container>button{
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: none;
+    border: 1px solid black;
+}
+.add-form>.button-container>button:hover{
+    border:1px solid var(--clr-accent-blue);
+    color: var(--clr-accent-blue);
+    cursor: pointer;
+    transition: .25s;
+}
+
+.add-form>.button-container>button:disabled{
+    border: 1px solid grey;
+    color: gray;
+    cursor: default;
+}

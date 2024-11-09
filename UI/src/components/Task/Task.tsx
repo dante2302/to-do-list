@@ -35,7 +35,7 @@ export default function Task({ taskData, updateTask }: TaskProps)
                 >{taskData.title}</h2>
                 <div className="date-time-container">
                     <span>{taskData.dueDate.toLocaleDateString()}</span>
-                    <span>{taskData.dueDate.toLocaleTimeString()}</span>
+                    <span>{taskData.dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , hour12: false})}</span>
                 </div>
             </div>
         </div>

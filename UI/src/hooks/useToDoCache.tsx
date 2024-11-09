@@ -22,10 +22,6 @@ export default function useToDoCache(): useToDoCacheReturnType
         return prev.map(t => t.id == updatedTask.id ? updatedTask : t)
     }
 
-    useEffect(() => {
-        console.log(taskCache);
-    }, [taskCache]);
-
     const cleanOnCompletion = (updatedTask: ToDoTask) =>
     {
         setTaskCache(prev => ({
@@ -35,7 +31,6 @@ export default function useToDoCache(): useToDoCacheReturnType
             "all": updateInAll(prev["all"], updatedTask)
         }));
     }
-
 
     const cleanAlreadyCompleted = (updatedTask: ToDoTask) =>
     {

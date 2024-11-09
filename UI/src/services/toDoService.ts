@@ -1,10 +1,32 @@
 import { STATUS } from "../enums/Status";
 import { TaskStatus } from "../enums/TaskStatus";
+import { ToDoSubmission } from "../interfaces/ToDoSubmission";
 import ToDoTask from "../interfaces/ToDoTask";
 import * as request from "./request";
 const BASE_URL = import.meta.env.VITE_API_URL;
 const TODO_URL = `${BASE_URL}/todos`
 
+export async function create(taskSubmission: ToDoSubmission)
+{
+    try{
+        const newTask = {...taskSubmission, isCompleted: false}
+        console.log(newTask);
+        const response = await request.post(TODO_URL, newTask);
+        const data: ToDoTask = await response.json();
+        return {
+            data,
+            status: STATUS.Success
+        }
+    }
+    catch(e)
+    {
+        console.log(e);
+        return { 
+            data: null, 
+            status: STATUS.Error 
+        };
+    }
+}
 export async function getOne(id: number)
 {
     try
