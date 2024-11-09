@@ -10,7 +10,8 @@ import Searchbar from "../Searchbar/Searchbar";
 import StatusHandler from "../StatusHandler/StatusHandler";
 import useToDoCache from "../../hooks/useToDoCache";
 import AddButton from "../AddButton/AddButton";
-import DeleteButton from "../DeleteButton/DeleteButton";
+import useLoadingSpinner from "../../hooks/useLoadingSpinner";
+import * as toDoService from "../../services/toDoService";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
@@ -21,13 +22,19 @@ export default function TaskHandler() {
         setTaskCache, 
         cleanOnCompletion,
         cleanAlreadyCompleted,
-        cacheNewTask
+        cacheNew,
+        removeFromCache
     ] = useToDoCache();
 
     const [taskData, setTaskData] =
         useState<ToDoTask[]>([]);
 
     const [hasError, setHasError] = useState(false);
+
+    useEffect(() => {
+        fetchTasksWithLoading();
+    }, [displayedTaskStatus]);
+
 
     const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) =>
     {
@@ -53,31 +60,30 @@ export default function TaskHandler() {
             ]));
     }
 
-    const deleteTask = async () => 
+    const deleteTask = async (task: ToDoTask) => 
     {
-
+        setTaskData(taskData.filter(t => t.id != task.id));
+        removeFromCache(task);
+        toDoService._delete(task.id);
     }
 
     // useEffect(() => {
     //     console.log(taskData);
     // }, [taskData])
 
-    useEffect(() => {
+    const fetchTasks = () => {
         const cachedTasks = taskCache[displayedTaskStatus];
-        if (cachedTasks && cachedTasks.length) 
-        {
+        if (cachedTasks && cachedTasks.length) {
             setTaskData(cachedTasks);
         }
-        else 
-        {
+        else {
             (async () => {
                 const serviceResponse = await getAllByStatus(displayedTaskStatus);
                 if (serviceResponse.status == STATUS.Error) {
                     setHasError(true);
                     return;
                 }
-                if(serviceResponse.data && serviceResponse.data.length)
-                {
+                if (serviceResponse.data && serviceResponse.data.length) {
                     setTaskData(serviceResponse.data);
                     setTaskCache(prev => ({
                         ...prev,
@@ -86,9 +92,9 @@ export default function TaskHandler() {
                 }
             })();
         }
-    }, [displayedTaskStatus]);
+    }
 
-
+    const [LoadingSpinner, fetchTasksWithLoading, isLoading] = useLoadingSpinner(fetchTasks);
     return (
         <>
         <div className="outer-wrap">
@@ -101,7 +107,7 @@ export default function TaskHandler() {
                         setDisplayedTaskStatus={setDisplayedTaskStatus}
                     >
                         <AddButton 
-                            cacheNewTask={cacheNewTask}
+                            cacheNewTask={cacheNew}
                             displayNewTask={displayNewTask}
                         />
    
@@ -122,6 +128,9 @@ export default function TaskHandler() {
                                 deleteTask={deleteTask}
                             />
                         )
+                        :
+                        isLoading ? 
+                        <LoadingSpinner size={15}/>
                         :
                         <p 
                             className="no-tasks"

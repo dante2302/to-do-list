@@ -105,9 +105,8 @@ export async function _delete(id: number)
     try
     {
         const response = await request._delete(`${BASE_URL}/todos/${id}`)
-        const data = await response.json()
         if(!response.ok)
-            throw data;
+            return STATUS.Error;
 
         return STATUS.Success
     }

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { LoaderSizeMarginProps, LoaderSizeProps } from "react-spinners/helpers/props";
 
-type Callback = (...args: any[]) => Promise<void>
+type Callback = (...args: any[]) => Promise<void> | void
 type ErrorCallback = (error: any | unknown) => void;
 
 function useLoadingSpinner(callback: Callback, errorCallback?: ErrorCallback): [LoadingSpinner, Callback, boolean]

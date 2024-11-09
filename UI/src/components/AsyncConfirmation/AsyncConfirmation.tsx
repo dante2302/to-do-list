@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import Modal from "../Modal/Modal";
-import { LoadingSpinner } from "../../hooks/useLoadingSpinner";
+import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import "./AsyncConfirmation.css";
 
 type props = PropsWithChildren & {
@@ -8,47 +8,51 @@ type props = PropsWithChildren & {
     callback: () => Promise<any>,
     show: boolean,
     toggleShow: () => void
-    isLoading?: boolean
-    LoadingSpinner?: LoadingSpinner
     yesMessage: string,
     noMessage: string,
     isSensitive: boolean
 }
-export default function AsyncConfirmation({   
-        message, 
-        toggleShow,
-        show,
-        callback,
-        isLoading, 
-        LoadingSpinner ,
-        yesMessage,
-        noMessage,
-        isSensitive
-    }: props) {
-        async function onSubmit(){
-            await callback()
-            toggleShow();
-        }
+
+export default function AsyncConfirmation({
+    message,
+    toggleShow,
+    show,
+    callback,
+    yesMessage,
+    noMessage,
+    isSensitive
+}: props) 
+{
+    async function onSubmit() {
+        await callbackWithLoading()
+        toggleShow();
+    }
+    const tempCallback = async () =>
+    {
+        await callback()
+        console.log("a")
+    }
+    const [LoadingSpinner, callbackWithLoading, isLoading] = useLoadingSpinner(tempCallback);
     return (
         show &&
         <Modal toggleModal={toggleShow}>
             <div className="confirmation-modal-content">
                 <h1>{message}</h1>
                 <div>
-                <button className={isSensitive ? "no-button" : "yes-button"}
-                    onClick={() => onSubmit()}>
-                    {
-                        (!LoadingSpinner || !isLoading)
-                            ?
-                            yesMessage
-                            :
-                            isLoading ? <LoadingSpinner color=""/> : "yes-message"
-                    }
-                </button>
-                <button className={`${isSensitive ? "sensitive" : ""} no-button `}
-                    onClick={() => {
-                        toggleShow();
-                }}>{noMessage}</button>
+                    <button className={isSensitive ? "no-button" : "yes-button"}
+                        onClick={() => onSubmit()}>
+                        {
+                            (!LoadingSpinner || !isLoading)
+                                ?
+                                yesMessage 
+                                :
+                                isLoading && <LoadingSpinner color="" />
+                        }
+                    </button>
+                    <button className={`${isSensitive ? "sensitive" : ""} no-button `}
+                        onClick={() => {
+                            toggleShow();
+                        }}>{noMessage}</button>
                 </div>
             </div>
         </Modal>

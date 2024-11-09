@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TaskStatus } from "../enums/TaskStatus";
 import ToDoTask from "../interfaces/ToDoTask";
 
@@ -7,7 +7,8 @@ type useToDoCacheReturnType = [
     React.Dispatch<React.SetStateAction<Record<TaskStatus, ToDoTask[]>>>,
     (updatedTask: ToDoTask) => void,
     (updatedTask: ToDoTask) => void,
-    (newTask: ToDoTask) => void
+    (newTask: ToDoTask) => void,
+    (taskToRemove: ToDoTask) => void
 ]
 
 export default function useToDoCache(): useToDoCacheReturnType
@@ -54,5 +55,16 @@ export default function useToDoCache(): useToDoCacheReturnType
         }));
     }
 
-    return [taskCache, setTaskCache, cleanOnCompletion, cleanAlreadyCompleted, cacheNewTask];
+    const removeFromCache = (taskToRemove: ToDoTask) => 
+    {
+        const updatedTasks: Record<TaskStatus, ToDoTask[]> = {} as Record<TaskStatus, ToDoTask[]>;
+
+        (Object.keys(taskCache) as TaskStatus[]).forEach((key) => {
+            updatedTasks[key] = taskCache[key].filter(task => task.id !== taskToRemove.id);
+        });
+
+        setTaskCache(updatedTasks);
+    }
+
+    return [taskCache, setTaskCache, cleanOnCompletion, cleanAlreadyCompleted, cacheNewTask, removeFromCache];
 }

@@ -8,7 +8,7 @@ interface TaskProps
 {
     taskData: ToDoTask;
     updateTask: UpdateTask;
-    deleteTask: () => Promise<unknown>
+    deleteTask: (task: ToDoTask) => Promise<unknown>
 }
 
 export default function Task({ taskData, updateTask, deleteTask }: TaskProps)
@@ -46,6 +46,7 @@ export default function Task({ taskData, updateTask, deleteTask }: TaskProps)
                     <span>{taskData.dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , hour12: false})}</span>
                      <DeleteButton 
                             confirmationCallback={deleteTask}
+                            taskData={taskData}
                         />
                 </div>
             </div>

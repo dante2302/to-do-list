@@ -1,13 +1,15 @@
 import { useState } from "react";
 import AsyncConfirmation from "../AsyncConfirmation/AsyncConfirmation"
 import "./DeleteButton.css";
+import ToDoTask from "../../interfaces/ToDoTask";
 
 interface DeleteButtonProps
 {
-    confirmationCallback: () => Promise<unknown>
+    confirmationCallback: (task: ToDoTask) => Promise<unknown>
+    taskData: ToDoTask
 }
 
-export default function DeleteButton({confirmationCallback}: DeleteButtonProps)
+export default function DeleteButton({confirmationCallback, taskData}: DeleteButtonProps)
 {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const toggleShowConfirmation = () => {setShowConfirmation(!showConfirmation)};
@@ -27,7 +29,7 @@ export default function DeleteButton({confirmationCallback}: DeleteButtonProps)
                 toggleShow={toggleShowConfirmation}
                 show={showConfirmation}
                 isSensitive={true}
-                callback={confirmationCallback}
+                callback={() => confirmationCallback(taskData)}
             />
 </>
     )
