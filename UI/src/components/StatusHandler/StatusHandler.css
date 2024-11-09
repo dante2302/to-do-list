@@ -2,11 +2,11 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .status-container>.active{
     color: var(--clr-accent-blue);
-    font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 10px;
     text-decoration-thickness: 2px;
@@ -14,9 +14,11 @@
 
 .status-container>span{
     text-transform: capitalize;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .status-container>span:hover{
+    transition: .2s;
     color: var(--clr-accent-blue);
 }

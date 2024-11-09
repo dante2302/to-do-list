@@ -42,6 +42,7 @@ export default function TaskHandler() {
     return (
         <div className="outer-wrap">
             <div className="outer-container">
+                <h1>TransferMate To Do List</h1>
                 <div className="upper-container">
                     <Searchbar />
                     <StatusHandler 

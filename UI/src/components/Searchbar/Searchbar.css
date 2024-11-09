@@ -1,0 +1,18 @@
+.search-form{
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.searchbar{
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid var(--clr-accent-lightgray);
+    transition: .15s;
+}
+
+.searchbar:focus, .searchbar:focus-visible, .searchbar:hover{
+    outline: none;
+    border: 2px solid black;
+}

@@ -3,10 +3,22 @@
     box-shadow: 1px 1px 1px black;
 }
 
+.outer-container>h1{
+    text-align: center;
+    margin-top: 20px;
+}
+
 .upper-container, .lower-container{
     padding: 30px;
+}
+
+.upper-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border-bottom: 1px solid var(--clr-accent-lightgray);
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .no-tasks{

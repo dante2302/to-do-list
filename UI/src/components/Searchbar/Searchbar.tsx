@@ -1,13 +1,24 @@
+import AddButton from "../AddButton/AddButton";
+import "./Searchbar.css";
+
 export default function Searchbar()
 {
-    const handleSearch = () => {};
+    const handleSearch = () => {
+    };
     return (
-        <form>
+        <form 
+            className="search-form"
+            onSubmit={(e) => {
+                e.preventDefault()
+            }}
+        >
             <input 
                 type="search" 
                 name="searchbar" 
                 id="searchbar" 
-                onChange={handleSearch}
+                className="searchbar"
+                placeholder="Search for a task"
+                onChange={(e) => handleSearch}
             />
         </form>
     );

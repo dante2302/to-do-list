@@ -1,0 +1,13 @@
+.add-new{
+    border: none;
+    background: inherit;
+    font-size: 30px;
+    color: var(--clr-accent-lightgray);
+    cursor: pointer;
+    text-align: center;
+    transition: .2s;
+}
+
+.add-new:hover{
+    color: var(--clr-accent-blue);
+}

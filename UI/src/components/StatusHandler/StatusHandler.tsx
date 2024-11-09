@@ -1,6 +1,7 @@
 import React from "react";
 import { TaskStatus } from "../../enums/TaskStatus";
 import "./StatusHandler.css"
+import AddButton from "../AddButton/AddButton";
 interface props{
     displayedTaskStatus: TaskStatus,
     setDisplayedTaskStatus: React.Dispatch<React.SetStateAction<TaskStatus>>
@@ -18,6 +19,7 @@ export default function StatusHandler({ displayedTaskStatus, setDisplayedTaskSta
                     {ts}
                 </span>
             )}
+            <AddButton />
         </div>
     );
 }

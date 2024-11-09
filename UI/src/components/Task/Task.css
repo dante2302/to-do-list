@@ -10,9 +10,10 @@
 
 .task{
     border-bottom: 1px solid var(--clr-accent-lightgray);
-    margin-inline: 20px;
+    margin-inline: 30px;
     gap: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .task input{
