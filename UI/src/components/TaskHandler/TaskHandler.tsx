@@ -9,6 +9,7 @@ import "./TaskHandler.css";
 import Searchbar from "../Searchbar/Searchbar";
 import StatusHandler from "../StatusHandler/StatusHandler";
 import useToDoCache from "../../hooks/useToDoCache";
+import AddButton from "../AddButton/AddButton";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
@@ -19,6 +20,7 @@ export default function TaskHandler() {
         setTaskCache, 
         cleanOnCompletion,
         cleanAlreadyCompleted,
+        cacheNewTask
     ] = useToDoCache();
 
     const [taskData, setTaskData] =
@@ -26,7 +28,7 @@ export default function TaskHandler() {
 
     const [hasError, setHasError] = useState(false);
 
-    const updateTaskList = (list: ToDoTask[], updatedTask: ToDoTask) =>
+    const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) =>
     {
         const updatedList = list.map(task => 
             task.id === updatedTask.id ? updatedTask : task
@@ -34,18 +36,30 @@ export default function TaskHandler() {
         return updatedList;
     }
 
-    const updateTask = (updatedTask: ToDoTask) => {
-        setTaskData(prevTasks => updateTaskList(prevTasks, updatedTask));
+    const updateTaskCompletion = (updatedTask: ToDoTask) => {
+        setTaskData(prevTasks => updateTaskCompletionList(prevTasks, updatedTask));
         updatedTask.isCompleted 
             ? cleanOnCompletion(updatedTask) 
             : cleanAlreadyCompleted(updatedTask);
     }
 
+    const displayNewTask = (newTask: ToDoTask) => 
+    {
+        if(displayedTaskStatus == "all" || displayedTaskStatus == "pending")
+            setTaskData(prevTasks => ([
+                ...prevTasks,
+                newTask
+            ]));
+    }
+
+    // useEffect(() => {
+    //     console.log(taskData);
+    // }, [taskData])
+
     useEffect(() => {
         const cachedTasks = taskCache[displayedTaskStatus];
         if (cachedTasks && cachedTasks.length) 
         {
-            console.log('nofetch');
             setTaskData(cachedTasks);
         }
         else 
@@ -56,11 +70,14 @@ export default function TaskHandler() {
                     setHasError(true);
                     return;
                 }
-                setTaskData(serviceResponse.data || []);
-                setTaskCache(prev => ({
-                    ...prev,
-                    [displayedTaskStatus]: serviceResponse.data || []
-                }))
+                if(serviceResponse.data && serviceResponse.data.length)
+                {
+                    setTaskData(serviceResponse.data);
+                    setTaskCache(prev => ({
+                        ...prev,
+                        [displayedTaskStatus]: serviceResponse.data
+                    }))
+                }
             })();
         }
     }, [displayedTaskStatus]);
@@ -75,7 +92,12 @@ export default function TaskHandler() {
                     <StatusHandler 
                         displayedTaskStatus={displayedTaskStatus} 
                         setDisplayedTaskStatus={setDisplayedTaskStatus}
-                    />
+                    >
+                        <AddButton 
+                            cacheNewTask={cacheNewTask}
+                            displayNewTask={displayNewTask}
+                        />
+                    </StatusHandler>
                 </div>
                 {hasError 
                     ? 
@@ -88,7 +110,7 @@ export default function TaskHandler() {
                             <Task
                                 key={task.id}
                                 taskData={task}
-                                updateTask={updateTask}
+                                updateTask={updateTaskCompletion}
                             />
                         )
                         :

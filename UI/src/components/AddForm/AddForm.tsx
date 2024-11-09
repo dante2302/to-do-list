@@ -7,12 +7,18 @@ import * as toDoService from "../../services/toDoService";
 import { ToDoSubmission } from "../../interfaces/ToDoSubmission";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import { getNearest10MinuteInterval } from "../../utils/dateUtils";
+import useToDoCache from "../../hooks/useToDoCache";
+import { STATUS } from "../../enums/Status";
+import ToDoTask from "../../interfaces/ToDoTask";
 
-interface AddFormProps {
-    toggleModal: () => void
+interface AddFormProps 
+{
+    toggleModal: () => void,
+    cacheNewTask: (newTask: ToDoTask) => void,
+    displayNewTask: (newTask: ToDoTask) => void,
 }
 
-export default function AddForm({ toggleModal }: AddFormProps) {
+export default function AddForm({ toggleModal, cacheNewTask, displayNewTask }: AddFormProps) {
     const initialState: ToDoSubmission = {
         title: "",
         dueDate: getNearest10MinuteInterval()
@@ -20,6 +26,7 @@ export default function AddForm({ toggleModal }: AddFormProps) {
 
     const [formState, setFormState] = useState(initialState);
     const [validationError, setValidationError] = useState(false);
+    const [fetchError, setFetchError] = useState(false);
     const [hasBlurred, setHasBlurred] = useState(false);
 
     const dateChangeHandler = (date: Date | null) => 
@@ -46,6 +53,7 @@ export default function AddForm({ toggleModal }: AddFormProps) {
     }, [formState])
 
     const changeHandler = useFormChange(setFormState);
+
     const filterTime = (time: Date) => 
     {
         const currentDate = new Date();
@@ -55,7 +63,16 @@ export default function AddForm({ toggleModal }: AddFormProps) {
 
     const submitHandler = async () => 
     {
-        await toDoService.create(formState);
+        const serviceResponse = await toDoService.create(formState);
+        if(serviceResponse.status == STATUS.Error || !serviceResponse.data)
+        {
+            setFetchError(true);
+            return;
+        }
+        const newTask = serviceResponse.data;
+        displayNewTask(newTask);
+        cacheNewTask(newTask);
+        toggleModal();
     }
 
     const [Spinner, submitWithSpinner, isLoading] = useLoadingSpinner(submitHandler);
@@ -109,6 +126,7 @@ export default function AddForm({ toggleModal }: AddFormProps) {
                 >{isLoading ? <Spinner size={15} /> :  "Create"}</button>
                 <button className="cancel-button" onClick={toggleModal}>Cancel</button>
                 </div>
+                {fetchError && <div>SOmething went wrong..</div>}
             </form>
         </div>
     );

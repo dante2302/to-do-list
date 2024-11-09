@@ -13,9 +13,9 @@ export async function create(taskSubmission: ToDoSubmission)
             ...taskSubmission, 
             isCompleted: false
         }
-        console.log(JSON.stringify(newTask));
         const response = await request.post(TODO_URL, newTask);
         const data: ToDoTask = await response.json();
+        mapTaskDate(data);
         return {
             data,
             status: STATUS.Success

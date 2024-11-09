@@ -1,13 +1,14 @@
-import React from "react";
+import React, { Children, PropsWithChildren } from "react";
 import { TaskStatus } from "../../enums/TaskStatus";
 import "./StatusHandler.css"
 import AddButton from "../AddButton/AddButton";
-interface props{
+interface props extends PropsWithChildren
+{
     displayedTaskStatus: TaskStatus,
     setDisplayedTaskStatus: React.Dispatch<React.SetStateAction<TaskStatus>>
 }
 
-export default function StatusHandler({ displayedTaskStatus, setDisplayedTaskStatus }: props) {
+export default function StatusHandler({ displayedTaskStatus, setDisplayedTaskStatus, children}: props) {
     return (
         <div className="status-container">
             {Object.values(TaskStatus).map(ts =>
@@ -19,7 +20,7 @@ export default function StatusHandler({ displayedTaskStatus, setDisplayedTaskSta
                     {ts}
                 </span>
             )}
-            <AddButton />
+            {children}
         </div>
     );
 }

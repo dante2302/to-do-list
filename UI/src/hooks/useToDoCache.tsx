@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TaskStatus } from "../enums/TaskStatus";
 import ToDoTask from "../interfaces/ToDoTask";
 
@@ -6,7 +6,8 @@ type useToDoCacheReturnType = [
     Record<TaskStatus, ToDoTask[]>, 
     React.Dispatch<React.SetStateAction<Record<TaskStatus, ToDoTask[]>>>,
     (updatedTask: ToDoTask) => void,
-    (updatedTask: ToDoTask) => void
+    (updatedTask: ToDoTask) => void,
+    (newTask: ToDoTask) => void
 ]
 
 export default function useToDoCache(): useToDoCacheReturnType
@@ -17,7 +18,7 @@ export default function useToDoCache(): useToDoCacheReturnType
     }, {} as Record<TaskStatus, ToDoTask[]>);
     const [taskCache, setTaskCache] = useState<Record<TaskStatus, ToDoTask[]>>(initialTaskCache);
 
-    const updateInAll = (prev: ToDoTask[], updatedTask: ToDoTask) =>
+    const updateCompletionInAll = (prev: ToDoTask[], updatedTask: ToDoTask) =>
     {
         return prev.map(t => t.id == updatedTask.id ? updatedTask : t)
     }
@@ -28,7 +29,7 @@ export default function useToDoCache(): useToDoCacheReturnType
             "completed": [...prev["completed"], updatedTask],
             "overdue": prev["overdue"].filter(t => t.id != updatedTask.id),
             "pending": prev["pending"].filter(t => t.id != updatedTask.id),
-            "all": updateInAll(prev["all"], updatedTask)
+            "all": updateCompletionInAll(prev["all"], updatedTask)
         }));
     }
 
@@ -40,9 +41,18 @@ export default function useToDoCache(): useToDoCacheReturnType
             ...prev,
             "completed": prev["completed"].filter(t => t.id != updatedTask.id),
             [forChange]: [...prev[forChange], updatedTask],
-            "all":  updateInAll(prev["all"], updatedTask)
+            "all":  updateCompletionInAll(prev["all"], updatedTask)
         }))
     }
 
-    return [taskCache, setTaskCache, cleanOnCompletion, cleanAlreadyCompleted];
+    const cacheNewTask = (newTask: ToDoTask) => 
+    {
+        setTaskCache(prev => ({
+            ...prev,
+            "pending": [...prev["pending"], newTask],
+            "all": [...prev["all"], newTask]
+        }));
+    }
+
+    return [taskCache, setTaskCache, cleanOnCompletion, cleanAlreadyCompleted, cacheNewTask];
 }
