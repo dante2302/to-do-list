@@ -11,6 +11,7 @@ export async function getOne(id: number)
     {
         const response = await request.get(`${TODO_URL}/${id}`);
         const data: ToDoTask = await response.json();
+        mapTaskDate(data);
         return {
             data,
             status: STATUS.Success
@@ -31,8 +32,8 @@ export async function getAllByStatus(status: TaskStatus)
     try
     {
         const response = await request.get(`${TODO_URL}/${status}`);
-        const data: ToDoTask[] = await response.json();
-
+        let data: ToDoTask[] = await response.json();
+        data = mapTaskListDates(data); 
         return {
             data,
             status: STATUS.Success
@@ -53,6 +54,7 @@ export async function update(updatedTodo: ToDoTask)
     {
         const response = await request.put(`${TODO_URL}/${updatedTodo.id}`, updatedTodo);
         const data = await response.json();
+        mapTaskDate(data);
 
         if(!response.ok)
             throw data;
@@ -89,4 +91,14 @@ export async function _delete(id: number)
         console.log(e);
         return STATUS.Error
     }
+}
+
+const mapTaskDate = (task: ToDoTask) => 
+{
+    task.dueDate = new Date(task.dueDate);
+}
+
+const mapTaskListDates = (data: ToDoTask[]) => 
+{
+    return data.map(task => ({ ...task, dueDate: new Date(task.dueDate) }));
 }

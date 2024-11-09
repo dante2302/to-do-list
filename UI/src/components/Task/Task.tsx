@@ -13,7 +13,9 @@ export default function Task({ taskData, updateTask }: TaskProps)
 {
     const toggleCompleted = async () => 
     {
+        console.log("updates");
         const updated = { ...taskData, isCompleted: !taskData.isCompleted };
+        console.log("updatedtask: ", updated);
         updateTask(updated);
         await toDoService.update(updated);
     }
@@ -34,8 +36,8 @@ export default function Task({ taskData, updateTask }: TaskProps)
                 <h2
                 >{taskData.title}</h2>
                 <div className="date-time-container">
-                    <span>{new Date(taskData.dueDate).toLocaleDateString()}</span>
-                    <span>{new Date(taskData.dueDate).toLocaleTimeString()}</span>
+                    <span>{taskData.dueDate.toLocaleDateString()}</span>
+                    <span>{taskData.dueDate.toLocaleTimeString()}</span>
                 </div>
             </div>
         </div>

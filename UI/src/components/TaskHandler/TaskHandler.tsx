@@ -8,34 +8,66 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import "./TaskHandler.css";
 import Searchbar from "../Searchbar/Searchbar";
 import StatusHandler from "../StatusHandler/StatusHandler";
+import useToDoCache from "../../hooks/useToDoCache";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
-        useState<TaskStatus>(TaskStatus.Pending);
+        useLocalStorage<TaskStatus>("LastDisplayedTaskStatus", TaskStatus.Pending);
+
+    const [
+        taskCache, 
+        setTaskCache, 
+        cleanCacheOnCompletion,
+        cleanCacheAlreadyCompleted,
+    ] = useToDoCache();
 
     const [taskData, setTaskData] =
-        useLocalStorage<ToDoTask[]>(`${displayedTaskStatus}Tasks`, []);
+        useState<ToDoTask[]>([]);
 
     const [hasError, setHasError] = useState(false);
 
-    const updateTask = (updatedTask: ToDoTask) => {
-        setTaskData(prevTasks =>
-            prevTasks.map(task =>
-                task.id === updatedTask.id ? updatedTask : task
-            )
+    const updateTaskList = (list: ToDoTask[], updatedTask: ToDoTask) =>
+    {
+        const updatedList = list.map(task => 
+            task.id === updatedTask.id ? updatedTask : task
         );
+        return updatedList;
+    }
+
+    const updateTask = (updatedTask: ToDoTask) => {
+        setTaskData(prevTasks => updateTaskList(prevTasks, updatedTask));
+        switch(displayedTaskStatus)
+        {
+            case "completed":
+                cleanCacheAlreadyCompleted(updatedTask);
+                break;
+            default:
+                cleanCacheOnCompletion(updatedTask);
+        }
     }
 
     useEffect(() => {
-        (async () => {
-            const serviceResponse = await getAllByStatus(displayedTaskStatus);
-            if (serviceResponse.status == STATUS.Error) {
-                setHasError(true);
-                return;
-            }
-            console.log(serviceResponse.data);
-            setTaskData(serviceResponse.data || []);
-        })();
+        const cachedTasks = taskCache[displayedTaskStatus];
+        if (cachedTasks && cachedTasks.length) 
+        {
+            console.log('nofetch');
+            setTaskData(cachedTasks);
+        }
+        else 
+        {
+            (async () => {
+                const serviceResponse = await getAllByStatus(displayedTaskStatus);
+                if (serviceResponse.status == STATUS.Error) {
+                    setHasError(true);
+                    return;
+                }
+                setTaskData(serviceResponse.data || []);
+                setTaskCache(prev => ({
+                    ...prev,
+                    [displayedTaskStatus]: serviceResponse.data || []
+                }))
+            })();
+        }
     }, [displayedTaskStatus]);
 
 
@@ -50,6 +82,10 @@ export default function TaskHandler() {
                         setDisplayedTaskStatus={setDisplayedTaskStatus}
                     />
                 </div>
+                {hasError 
+                    ? 
+                    <h2>Something Went Wrong. Try Again Later</h2>
+                    :
                 <div className="lower-container">
                     {taskData.length
                         ?
@@ -66,7 +102,9 @@ export default function TaskHandler() {
                         >You have no {displayedTaskStatus == "all" ? "" : displayedTaskStatus } tasks.</p>
                     }
                 </div>
+                }
             </div>
         </div>
     );
 }
+        // useLocalStorage<ToDoTask[]>(`${displayedTaskStatus}Tasks`, []);

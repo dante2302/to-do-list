@@ -1,4 +1,3 @@
-import AddButton from "../AddButton/AddButton";
 import "./Searchbar.css";
 
 export default function Searchbar()
