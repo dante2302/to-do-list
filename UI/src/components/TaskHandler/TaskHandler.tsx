@@ -10,6 +10,7 @@ import Searchbar from "../Searchbar/Searchbar";
 import StatusHandler from "../StatusHandler/StatusHandler";
 import useToDoCache from "../../hooks/useToDoCache";
 import AddButton from "../AddButton/AddButton";
+import DeleteButton from "../DeleteButton/DeleteButton";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
@@ -52,6 +53,11 @@ export default function TaskHandler() {
             ]));
     }
 
+    const deleteTask = async () => 
+    {
+
+    }
+
     // useEffect(() => {
     //     console.log(taskData);
     // }, [taskData])
@@ -84,6 +90,7 @@ export default function TaskHandler() {
 
 
     return (
+        <>
         <div className="outer-wrap">
             <div className="outer-container">
                 <div className="upper-container">
@@ -97,6 +104,7 @@ export default function TaskHandler() {
                             cacheNewTask={cacheNewTask}
                             displayNewTask={displayNewTask}
                         />
+   
                     </StatusHandler>
                 </div>
                 {hasError 
@@ -111,6 +119,7 @@ export default function TaskHandler() {
                                 key={task.id}
                                 taskData={task}
                                 updateTask={updateTaskCompletion}
+                                deleteTask={deleteTask}
                             />
                         )
                         :
@@ -122,5 +131,6 @@ export default function TaskHandler() {
                 }
             </div>
         </div>
+</>
     );
 }

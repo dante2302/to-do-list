@@ -1,0 +1,72 @@
+.confirmation-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.confirmation-modal-content div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px
+}
+
+.confirmation-modal-content h1 {
+    font-size: 30px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.confirmation-modal-content button {
+    background: none;
+    cursor: pointer;
+    transition: .2s;
+    padding: 5px 15px;
+    border-radius: 45px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+.yes-button {
+    color: green;
+    background: white;
+    border: 1px solid green;
+}
+
+.yes-button:hover {
+    color: white;
+    background-color: green;
+}
+
+.no-button {
+    color: red;
+    border: 1px solid red;
+}
+
+.no-button:hover {
+    color: white;
+    background: red;
+}
+
+.no-button.sensitive{
+    border: 1px solid black;
+    color: black;
+}
+
+.no-button.sensitive:hover{
+    background: var(--clr-accent-blue);
+    color: white;
+    border: 1px solid var(--clr-accent-blue);
+}

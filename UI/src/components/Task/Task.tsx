@@ -1,15 +1,17 @@
 import ToDoTask from "../../interfaces/ToDoTask";
 import { UpdateTask } from "../../interfaces/UpdateTask";
 import * as toDoService from "../../services/toDoService";
+import DeleteButton from "../DeleteButton/DeleteButton";
 import "./Task.css";
 
 interface TaskProps
 {
     taskData: ToDoTask;
     updateTask: UpdateTask;
+    deleteTask: () => Promise<unknown>
 }
 
-export default function Task({ taskData, updateTask }: TaskProps)
+export default function Task({ taskData, updateTask, deleteTask }: TaskProps)
 {
     const toggleCompleted = async () => 
     {
@@ -42,6 +44,9 @@ export default function Task({ taskData, updateTask }: TaskProps)
                         year: '2-digit'
                     })}</span>
                     <span>{taskData.dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , hour12: false})}</span>
+                     <DeleteButton 
+                            confirmationCallback={deleteTask}
+                        />
                 </div>
             </div>
         </div>
