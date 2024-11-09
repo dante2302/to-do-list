@@ -3,11 +3,7 @@ import "./index.css";
 import TaskHandler from "./TaskHandler/TaskHandler";
 
 function App() {
-  return (
-    <div className="outer">
-      <TaskHandler />
-    </div>
-  )
+  return <TaskHandler />
 }
 
 export default App

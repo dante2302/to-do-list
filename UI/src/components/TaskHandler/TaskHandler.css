@@ -1,0 +1,28 @@
+.outer-container{
+    border: 1px solid grey;
+    box-shadow: 1px 1px 1px black;
+}
+
+.upper-container, .lower-container{
+    padding: 30px;
+    border-bottom: 1px solid var(--clr-accent-lightgray);
+    margin-bottom: 10px;
+}
+
+.no-tasks{
+    font-weight: 600;
+    font-size: 30px;
+    text-align: center;
+}
+
+.outer-wrap{
+    width: 50%;
+    margin: auto;
+}
+
+@media(max-width: 768px)
+{
+    .outer-wrap{
+        width: 80%;
+    } 
+}

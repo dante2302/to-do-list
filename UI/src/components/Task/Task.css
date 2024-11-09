@@ -5,13 +5,37 @@
 }
 
 .date-time-container{
-    gap: 10px;
+    gap: 40px;
 }
 
 .task{
-    justify-content: space-between;
+    border-bottom: 1px solid var(--clr-accent-lightgray);
+    margin-inline: 20px;
+    gap: 40px;
+    margin-bottom: 20px;
 }
 
 .task input{
     transform: scale(1.5);
+}
+
+.inner-task{
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    width: 90%;
+}
+
+.striked{
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%);
+    background-color: black;
+}
+
+.not-striked{
+    display: none;
 }

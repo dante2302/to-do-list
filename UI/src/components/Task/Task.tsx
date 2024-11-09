@@ -7,18 +7,17 @@ interface TaskProps
 {
     taskData: ToDoTask;
     updateTask: UpdateTask;
-    setChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Task({ taskData, updateTask, setChange }: TaskProps)
+export default function Task({ taskData, updateTask }: TaskProps)
 {
     const toggleCompleted = async () => 
     {
-        const updated = {...taskData, isCompleted: !taskData.isCompleted};
+        const updated = { ...taskData, isCompleted: !taskData.isCompleted };
         updateTask(updated);
         await toDoService.update(updated);
     }
-    console.log(typeof taskData.dueDate)
+
     return (
         <div className="task">
             <form>
@@ -28,10 +27,16 @@ export default function Task({ taskData, updateTask, setChange }: TaskProps)
                     onChange={async () => await toggleCompleted()}
                 />
             </form>
-            <h2>{taskData.title}</h2>
-            <div className="date-time-container">
-                {/* <span>{taskData.dueDate.toLocaleDateString()}</span> */}
-                <span>{taskData.dueDate.toLocaleString()}</span>
+            <div className="inner-task">
+                <span
+                    className={taskData.isCompleted ? "striked" : "not-striked"}
+                ></span>
+                <h2
+                >{taskData.title}</h2>
+                <div className="date-time-container">
+                    <span>{new Date(taskData.dueDate).toLocaleDateString()}</span>
+                    <span>{new Date(taskData.dueDate).toLocaleTimeString()}</span>
+                </div>
             </div>
         </div>
     );

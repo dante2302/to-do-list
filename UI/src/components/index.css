@@ -1,5 +1,7 @@
 :root{
-    --ff-main: "Poppins"
+    --ff-main: "Poppins";
+    --clr-accent-blue: #3c87ff;
+    --clr-accent-lightgray: lightgray;
 }
 
 #root{

@@ -18,7 +18,7 @@ public static class ToDoTasks
                 : Results.BadRequest(result.Message);
         });
 
-        toDoTasks.MapGet("", async (IToDoService service) => {
+        toDoTasks.MapGet("/all", async (IToDoService service) => {
             ServiceResult<List<ToDoTask>> result = await service.GetAll();
             return result.IsSuccess
                 ? Results.Ok(result.Data)

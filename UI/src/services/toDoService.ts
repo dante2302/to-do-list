@@ -26,27 +26,6 @@ export async function getOne(id: number)
     }
 }
 
-export async function getAll()
-{
-    try
-    {
-        const response = await request.get(`${TODO_URL}`);
-        const data: ToDoTask[] = await response.json();
-        return {
-            data,
-            status: STATUS.Success
-        }
-    }
-    catch(e)
-    {
-        console.log(e);
-        return { 
-            data: null, 
-            status: STATUS.Error 
-        };
-    }
-}
-
 export async function getAllByStatus(status: TaskStatus)
 {
     try

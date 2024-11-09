@@ -1,0 +1,22 @@
+.status-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.status-container>.active{
+    color: var(--clr-accent-blue);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+    text-decoration-thickness: 2px;
+}
+
+.status-container>span{
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.status-container>span:hover{
+    color: var(--clr-accent-blue);
+}
