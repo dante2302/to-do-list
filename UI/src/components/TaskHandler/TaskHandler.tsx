@@ -102,4 +102,3 @@ export default function TaskHandler() {
         </div>
     );
 }
-        // useLocalStorage<ToDoTask[]>(`${displayedTaskStatus}Tasks`, []);

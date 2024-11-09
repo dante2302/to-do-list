@@ -37,6 +37,10 @@
     width: 100%;
 }
 
+.lower-container.tasks-overdue *{
+    color: red;
+}
+
 .no-tasks{
     font-weight: 600;
     font-size: 28px;

@@ -22,18 +22,21 @@
 }
 
 .inner-task{
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 30% 70%;
     position: relative;
     width: 90%;
     gap: 60px;
     flex-shrink: 1;
-    align-items: center;
 }
 
 .inner-task h2{
     font-size: 24px;
     font-weight: 400;
+}
+
+.inner-task.overdue-task *{
+    color: red;
 }
 
 @media(max-width: 640px)

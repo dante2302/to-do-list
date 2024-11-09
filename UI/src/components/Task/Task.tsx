@@ -27,14 +27,20 @@ export default function Task({ taskData, updateTask }: TaskProps)
                     onChange={async () => await toggleCompleted()}
                 />
             </form>
-            <div className="inner-task">
+            <div className={`${
+                    taskData.dueDate < new Date() && !taskData.isCompleted ? "overdue-task" : ""} inner-task`
+                }>
                 <span
                     className={taskData.isCompleted ? "striked" : "not-striked"}
                 ></span>
                 <h2
                 >{taskData.title}</h2>
                 <div className="date-time-container">
-                    <span>{taskData.dueDate.toLocaleDateString()}</span>
+                    <span>{taskData.dueDate.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: '2-digit'
+                    })}</span>
                     <span>{taskData.dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' , hour12: false})}</span>
                 </div>
             </div>

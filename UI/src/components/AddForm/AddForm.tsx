@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import * as toDoService from "../../services/toDoService";
 import { ToDoSubmission } from "../../interfaces/ToDoSubmission";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
+import { getNearest10MinuteInterval } from "../../utils/dateUtils";
 
 interface AddFormProps {
     toggleModal: () => void
@@ -14,11 +15,12 @@ interface AddFormProps {
 export default function AddForm({ toggleModal }: AddFormProps) {
     const initialState: ToDoSubmission = {
         title: "",
-        dueDate: new Date(Date.now() + 5 * 600000)
+        dueDate: getNearest10MinuteInterval()
     };
 
     const [formState, setFormState] = useState(initialState);
-    const [validationError, setValidationError] = useState(true);
+    const [validationError, setValidationError] = useState(false);
+    const [hasBlurred, setHasBlurred] = useState(false);
 
     const dateChangeHandler = (date: Date | null) => 
     {
@@ -31,11 +33,16 @@ export default function AddForm({ toggleModal }: AddFormProps) {
         }
     }
 
-    useEffect(() => {
+    const checkError = () => 
+    {
         if(!formState.title)
             setValidationError(true)
         else
             setValidationError(false)
+    }
+
+    useEffect(() => {
+        checkError();
     }, [formState])
 
     const changeHandler = useFormChange(setFormState);
@@ -43,8 +50,6 @@ export default function AddForm({ toggleModal }: AddFormProps) {
     {
         const currentDate = new Date();
         const selectedDate = new Date(time);
-
-        // Only allow times after the current time if the date is today
         return selectedDate >= currentDate;
     }
 
@@ -64,7 +69,7 @@ export default function AddForm({ toggleModal }: AddFormProps) {
                 <div className="input-wrap">
 
                 <label htmlFor="title">
-                    Title
+                    <span className="required">*</span>Title
                 </label>
                 <input
                     type="text"
@@ -72,7 +77,9 @@ export default function AddForm({ toggleModal }: AddFormProps) {
                     value={formState.title}
                     onChange={(e) => changeHandler(e)}
                     className="title-input"
+                    onBlur={() => setHasBlurred(true)}
                 />
+                {(validationError && hasBlurred )&& <p className="validation-message">Title is required</p>}
                 </div>
                 <div className="input-wrap date-input-wrap">
 

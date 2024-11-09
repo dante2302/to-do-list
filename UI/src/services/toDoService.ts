@@ -9,8 +9,11 @@ const TODO_URL = `${BASE_URL}/todos`
 export async function create(taskSubmission: ToDoSubmission)
 {
     try{
-        const newTask = {...taskSubmission, isCompleted: false}
-        console.log(newTask);
+        const newTask = {
+            ...taskSubmission, 
+            isCompleted: false
+        }
+        console.log(JSON.stringify(newTask));
         const response = await request.post(TODO_URL, newTask);
         const data: ToDoTask = await response.json();
         return {

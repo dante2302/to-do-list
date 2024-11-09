@@ -56,21 +56,35 @@
     margin-block: 30px;
 }
 
-.add-form>.button-container>button{
+.create-task-btn, .cancel-button{
     padding: 10px 20px;
     border-radius: 10px;
     background: none;
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.822);
+    font-weight: 600;
+    font-size: 18px;
+    transition: .25s;
 }
-.add-form>.button-container>button:hover{
+
+.create-task-btn:hover{
     border:1px solid var(--clr-accent-blue);
     color: var(--clr-accent-blue);
     cursor: pointer;
-    transition: .25s;
+}
+
+.cancel-button:hover{
+    border: 1px solid red;
+    color: red;
+    cursor: pointer;
 }
 
 .add-form>.button-container>button:disabled{
     border: 1px solid grey;
     color: gray;
     cursor: default;
+}
+
+.required, .validation-message{
+    vertical-align:middle;
+    color: red;
 }

@@ -14,8 +14,8 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         if (string.IsNullOrEmpty(task.Title))
             return ServiceResult<ToDoTask>.Failure("Title is required.");
 
-        if (task.DueDate < DateTime.Now)
-            return ServiceResult<ToDoTask>.Failure("Due date cannot be in the past.");
+        if (task.DueDate < DateTime.UtcNow)
+            return ServiceResult<ToDoTask>.Failure($"Due date cannot be in the past.");
 
         _dbContext.Tasks.Add(task);
         await _dbContext.SaveChangesAsync();
