@@ -17,8 +17,8 @@ export default function TaskHandler() {
     const [
         taskCache, 
         setTaskCache, 
-        cleanCacheOnCompletion,
-        cleanCacheAlreadyCompleted,
+        cleanOnCompletion,
+        cleanAlreadyCompleted,
     ] = useToDoCache();
 
     const [taskData, setTaskData] =
@@ -36,14 +36,9 @@ export default function TaskHandler() {
 
     const updateTask = (updatedTask: ToDoTask) => {
         setTaskData(prevTasks => updateTaskList(prevTasks, updatedTask));
-        switch(displayedTaskStatus)
-        {
-            case "completed":
-                cleanCacheAlreadyCompleted(updatedTask);
-                break;
-            default:
-                cleanCacheOnCompletion(updatedTask);
-        }
+        updatedTask.isCompleted 
+            ? cleanOnCompletion(updatedTask) 
+            : cleanAlreadyCompleted(updatedTask);
     }
 
     useEffect(() => {
@@ -74,8 +69,8 @@ export default function TaskHandler() {
     return (
         <div className="outer-wrap">
             <div className="outer-container">
-                <h1>TransferMate To Do List</h1>
                 <div className="upper-container">
+                <h1>TransferMate To Do List</h1>
                     <Searchbar />
                     <StatusHandler 
                         displayedTaskStatus={displayedTaskStatus} 

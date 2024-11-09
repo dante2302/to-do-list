@@ -1,4 +1,3 @@
-import "./temp.css";
 import "./index.css";
 import TaskHandler from "./TaskHandler/TaskHandler";
 

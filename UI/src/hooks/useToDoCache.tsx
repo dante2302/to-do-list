@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TaskStatus } from "../enums/TaskStatus";
 import ToDoTask from "../interfaces/ToDoTask";
 
@@ -22,17 +22,22 @@ export default function useToDoCache(): useToDoCacheReturnType
         return prev.map(t => t.id == updatedTask.id ? updatedTask : t)
     }
 
-    const cleanCacheOnCompletion = (updatedTask: ToDoTask) =>
+    useEffect(() => {
+        console.log(taskCache);
+    }, [taskCache]);
+
+    const cleanOnCompletion = (updatedTask: ToDoTask) =>
     {
         setTaskCache(prev => ({
-            "completed": [...prev["completed"], updatedTask ],
+            "completed": [...prev["completed"], updatedTask],
             "overdue": prev["overdue"].filter(t => t.id != updatedTask.id),
             "pending": prev["pending"].filter(t => t.id != updatedTask.id),
-            "all":  updateInAll(prev["all"], updatedTask)
+            "all": updateInAll(prev["all"], updatedTask)
         }));
     }
 
-    const cleanCacheAlreadyCompleted = (updatedTask: ToDoTask) =>
+
+    const cleanAlreadyCompleted = (updatedTask: ToDoTask) =>
     {
         const isPending = updatedTask.dueDate >= new Date(Date.now());
         const forChange = isPending ? "pending" : "overdue";
@@ -44,5 +49,5 @@ export default function useToDoCache(): useToDoCacheReturnType
         }))
     }
 
-    return [taskCache, setTaskCache, cleanCacheOnCompletion, cleanCacheAlreadyCompleted];
+    return [taskCache, setTaskCache, cleanOnCompletion, cleanAlreadyCompleted];
 }

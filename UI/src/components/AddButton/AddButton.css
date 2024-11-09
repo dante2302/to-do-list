@@ -2,7 +2,7 @@
     border: none;
     background: inherit;
     font-size: 30px;
-    color: var(--clr-accent-lightgray);
+    color: gray;
     cursor: pointer;
     text-align: center;
     transition: .2s;

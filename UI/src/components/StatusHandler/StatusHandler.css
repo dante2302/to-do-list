@@ -15,6 +15,7 @@
 .status-container>span{
     text-transform: capitalize;
     font-weight: 600;
+    font-size: 16px;
     cursor: pointer;
 }
 

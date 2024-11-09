@@ -1,15 +1,20 @@
-.outer-container{
-    border: 1px solid grey;
-    box-shadow: 1px 1px 1px black;
+.outer-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.outer-container>h1{
+.outer-container{
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.upper-container>h1{
     text-align: center;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .upper-container, .lower-container{
-    padding: 30px;
+    padding: 40px ;
 }
 
 .upper-container{
@@ -29,7 +34,7 @@
 
 .outer-wrap{
     width: 50%;
-    margin: auto;
+    margin: 50px auto;
 }
 
 @media(max-width: 768px)

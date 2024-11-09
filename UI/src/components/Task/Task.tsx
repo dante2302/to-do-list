@@ -13,9 +13,7 @@ export default function Task({ taskData, updateTask }: TaskProps)
 {
     const toggleCompleted = async () => 
     {
-        console.log("updates");
         const updated = { ...taskData, isCompleted: !taskData.isCompleted };
-        console.log("updatedtask: ", updated);
         updateTask(updated);
         await toDoService.update(updated);
     }
