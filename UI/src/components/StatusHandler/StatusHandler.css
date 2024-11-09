@@ -23,3 +23,11 @@
     transition: .2s;
     color: var(--clr-accent-blue);
 }
+
+@media(max-width: 400px)
+{
+    .status-container{
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+}

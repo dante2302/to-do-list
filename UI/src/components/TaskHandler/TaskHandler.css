@@ -6,15 +6,22 @@
 
 .outer-container{
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .upper-container>h1{
     text-align: center;
+    font-size: 40px;
     margin-bottom: 20px;
 }
 
 .upper-container, .lower-container{
     padding: 40px ;
+    padding-bottom: 20px;
 }
 
 .upper-container{
@@ -26,10 +33,15 @@
     margin-bottom: 20px;
 }
 
+.lower-container{
+    width: 100%;
+}
+
 .no-tasks{
     font-weight: 600;
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
+    margin-bottom: 40px;
 }
 
 .outer-wrap{
@@ -40,6 +52,11 @@
 @media(max-width: 768px)
 {
     .outer-wrap{
-        width: 80%;
+        width: auto;
+        height: 100%;
+        margin: auto;
     } 
+    .upper-container>h1{
+        font-size: 30px;
+    }
 }

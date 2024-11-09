@@ -6,6 +6,7 @@
 
 .date-time-container{
     gap: 40px;
+    text-wrap: nowrap;
 }
 
 .task{
@@ -26,6 +27,33 @@
     position: relative;
     width: 90%;
     gap: 60px;
+    flex-shrink: 1;
+    align-items: center;
+}
+
+.inner-task h2{
+    font-size: 30px;
+}
+
+@media(max-width: 640px)
+{
+    .inner-task h2{
+        font-size: 20px;
+        text-wrap: wrap;
+    }
+    .inner-task span{
+        font-size: 15px;
+    }
+    .date-time-container{
+        gap: 10px;
+        flex-direction: column;
+    }
+    .task,.inner-task{
+        gap: 20px;
+    }
+    .striked{
+        display: none;
+    }
 }
 
 .striked{
