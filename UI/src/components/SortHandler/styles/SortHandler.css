@@ -14,7 +14,6 @@
     position: absolute;
     padding: 10px 20px;
     right: 0;
-    width: 200px;
     margin-top: 10px;
 }
 
@@ -22,22 +21,47 @@
     display:flex;
 }
 
-.sort-option{
+.sort-options>span{
     cursor: pointer;
     text-transform: capitalize;
-
 }
 
-.sort-option>span{
+.sort-options>div{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.sort-options>span>span{
     margin-left: 20px;
     color: var(--clr-accent-blue);
 }
-.sort-option.active{
+
+.sort-options>div>span
+{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sort-options>span.active,
+.sort-options>div>span.active {
     color: var(--clr-accent-blue);
     font-weight: bold;
 }
 
 .sort-options-heading{
     color: grey;
+    margin-right: 20px;
     pointer-events: none;
+    text-wrap: nowrap;
+}
+
+.dir-symbol{
+    font-weight: 600;
+    font-size: 25px;
 }

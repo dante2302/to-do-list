@@ -1,3 +1,4 @@
+import { SortDirection, SortGroup } from "../enums/SortGroup";
 import { STATUS } from "../enums/Status";
 import { TaskStatus } from "../enums/TaskStatus";
 import { ToDoSubmission } from "../interfaces/ToDoSubmission";
@@ -52,11 +53,22 @@ export async function getOne(id: number)
     }
 }
 
-export async function getAllByStatus(status: TaskStatus, title?: string)
+export async function getAllByStatus(
+    status: TaskStatus, 
+    title?: string, 
+    order?: SortGroup,
+    orderDir?: SortDirection
+)
 {
     try
     {
-        const url =  `${TODO_URL}/${status}/${title ? "?title=" + title : ""}`
+        let url =  `${TODO_URL}/${status}
+            ${title ? "?title=" + title : ""}
+            ${order ? ((title ? "&" : "?" ) + "orderBy=" + order) : ""}
+            ${orderDir ? ((title || order) ? "&" : "?") + "orderDir=" + orderDir : ""}`;
+        url = url.replace(/\s+/g, '')
+        console.log(url);
+
         const response = await request.get(url);
         let data: ToDoTask[] = await response.json();
         data = mapTaskListDates(data); 

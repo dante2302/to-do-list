@@ -13,10 +13,16 @@ import AddButton from "../AddButton/AddButton";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import * as toDoService from "../../services/toDoService";
 import SortHandler from "../SortHandler/SortHandler";
+import { SortDirection, SortGroup } from "../../enums/SortGroup";
 
 export default function TaskHandler() {
+    const [isInitialRender, setIsInitialRender] = useState(true);
     const [displayedTaskStatus, setDisplayedTaskStatus] =
         useLocalStorage<TaskStatus>("LastDisplayedTaskStatus", TaskStatus.Pending);
+
+    const [currentSort, setCurrentSort] = useLocalStorage("LastSort", SortGroup.Title);
+    const [currentSortDirection, setCurrentSortDirection] = 
+        useLocalStorage("LastSortDirection", SortDirection.Descending)
 
     const [
         taskCache,
@@ -68,7 +74,12 @@ export default function TaskHandler() {
         }
         else {
             (async () => {
-                const serviceResponse = await getAllByStatus(displayedTaskStatus);
+                const serviceResponse = await getAllByStatus(
+                    displayedTaskStatus,
+                    undefined,
+                    currentSort,
+                    currentSortDirection
+                );
                 if (serviceResponse.status == STATUS.Error) {
                     setHasError(true);
                     return;
@@ -86,6 +97,7 @@ export default function TaskHandler() {
                     setTaskData([]);
             })();
         }
+        setIsInitialRender(false);
     }
 
     const [LoadingSpinner, fetchTasksWithLoading, isLoading] = useLoadingSpinner(fetchTasks);
@@ -112,7 +124,13 @@ export default function TaskHandler() {
                                 cacheNewTask={cacheNew}
                                 displayNewTask={displayNewTask}
                             />
-                        <SortHandler />
+                            <SortHandler
+                                currentSort={currentSort}
+                                currentSortDirection={currentSortDirection}
+                                setCurrentSort={setCurrentSort}
+                                setCurrentSortDirection={setCurrentSortDirection}
+                                setTasksData={setTaskData}
+                            />
 
                         </StatusHandler>
                     </div>
@@ -132,7 +150,7 @@ export default function TaskHandler() {
                                     />
                                 )
                                 :
-                                isLoading ?
+                                isLoading || isInitialRender ?
                                     <LoadingSpinner size={15} />
                                     :
                                     <p

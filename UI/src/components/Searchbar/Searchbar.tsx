@@ -44,11 +44,8 @@ export default function Searchbar({taskData, setTaskData, currentDisplayStatus, 
 
     const searchAmongDisplayed = () => 
     {
-        console.log("searhbar");
-        console.log(taskData);
         const filtered = taskData.filter(t =>
             t.title.toLowerCase().includes(query.toLowerCase()));
-            console.log(filtered);
         return filtered;
     }
 
