@@ -27,12 +27,8 @@ export default function AsyncConfirmation({
         await callbackWithLoading()
         toggleShow();
     }
-    const tempCallback = async () =>
-    {
-        await callback()
-        console.log("a")
-    }
-    const [LoadingSpinner, callbackWithLoading, isLoading] = useLoadingSpinner(tempCallback);
+
+    const [LoadingSpinner, callbackWithLoading, isLoading] = useLoadingSpinner(callback);
     return (
         show &&
         <Modal toggleModal={toggleShow}>

@@ -1,38 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Searchbar.css";
-import useFormChange from "../../hooks/useFormChange";
 import ToDoTask from "../../interfaces/ToDoTask";
+import { TaskStatus } from "../../enums/TaskStatus";
+import { getAllByStatus } from "../../services/toDoService";
+import { STATUS } from "../../enums/Status";
 
 interface SearchbarProps
 {
     taskData: ToDoTask[]
     setTaskData: React.Dispatch<React.SetStateAction<ToDoTask[]>>
+    currentDisplayStatus: TaskStatus
+    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Searchbar({taskData, setTaskData}: SearchbarProps)
+export default function Searchbar({taskData, setTaskData, currentDisplayStatus, setIsSearching}: SearchbarProps)
 {
     const [query, setQuery] = useState("");
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => 
+    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => 
     {
         const value = e.target.value ;
         setQuery(value);
+        if(query.length <= 1)
+        {
+            setIsSearching(false);
+            return;
+        }
+        setIsSearching(true);
         const inDisplayedTasks = searchAmongDisplayed(); 
 
         if(inDisplayedTasks && inDisplayedTasks.length)
         {
             setTaskData(inDisplayedTasks);
+            return;
         }
         else
         {
-            
+            const response = await getAllByStatus(currentDisplayStatus, query);
+            if(response.status == STATUS.Success && response.data)
+                setTaskData(response.data);
         }
     };
 
     const searchAmongDisplayed = () => 
     {
-        return taskData.filter(t =>
+        console.log("searhbar");
+        console.log(taskData);
+        const filtered = taskData.filter(t =>
             t.title.toLowerCase().includes(query.toLowerCase()));
+            console.log(filtered);
+        return filtered;
     }
 
     return (
@@ -49,7 +66,7 @@ export default function Searchbar({taskData, setTaskData}: SearchbarProps)
                 className="searchbar"
                 value={query}
                 placeholder="Search for a task"
-                onChange={(e) => handleSearch(e)}
+                onChange={async (e) => await handleSearch(e)}
             />
         </form>
     );

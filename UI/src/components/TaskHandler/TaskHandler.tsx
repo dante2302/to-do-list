@@ -12,6 +12,7 @@ import useToDoCache from "../../hooks/useToDoCache";
 import AddButton from "../AddButton/AddButton";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import * as toDoService from "../../services/toDoService";
+import { set } from "react-datepicker/dist/date_utils";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
@@ -30,8 +31,9 @@ export default function TaskHandler() {
         useState<ToDoTask[]>([]);
 
     const [hasError, setHasError] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
 
-    useEffect(() => {fetchTasksWithLoading();}, [displayedTaskStatus]);
+    useEffect(() => {fetchTasksWithLoading();}, [displayedTaskStatus, isSearching]);
 
 
     const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) => {
@@ -63,6 +65,7 @@ export default function TaskHandler() {
     }
 
     const fetchTasks = () => {
+        if(isSearching) return;
         const cachedTasks = taskCache[displayedTaskStatus];
         if (cachedTasks && cachedTasks.length) {
             setTaskData(cachedTasks);
@@ -99,6 +102,8 @@ export default function TaskHandler() {
                         <Searchbar 
                             taskData={taskData}
                             setTaskData={setTaskData}
+                            currentDisplayStatus={displayedTaskStatus}
+                            setIsSearching={setIsSearching}
                         />
                         <StatusHandler
                             displayedTaskStatus={displayedTaskStatus}

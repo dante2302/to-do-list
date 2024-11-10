@@ -52,11 +52,12 @@ export async function getOne(id: number)
     }
 }
 
-export async function getAllByStatus(status: TaskStatus)
+export async function getAllByStatus(status: TaskStatus, title?: string)
 {
     try
     {
-        const response = await request.get(`${TODO_URL}/${status}`);
+        const url =  `${TODO_URL}/${status}/${title ? "?title=" + title : ""}`
+        const response = await request.get(url);
         let data: ToDoTask[] = await response.json();
         data = mapTaskListDates(data); 
         return {

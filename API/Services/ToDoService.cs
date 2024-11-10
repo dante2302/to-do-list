@@ -48,7 +48,7 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
             await _dbContext.Tasks.ToListAsync()
             :
             await _dbContext.Tasks
-                .Where(t => t.Title == searchQuery)
+                .Where(t => t.Title.Contains(searchQuery))
                 .ToListAsync();
 
         return ServiceResult<List<ToDoTask>>.Success(tasks);
@@ -60,7 +60,7 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
             .Where(t => !t.IsCompleted && (t.DueDate == null || t.DueDate >= DateTime.UtcNow));
 
         if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title == searchQuery);
+            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
 
         var taskList = await tasks.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
@@ -71,7 +71,7 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         var tasks =  _dbContext.Tasks
             .Where(t => t.IsCompleted);
         if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title == searchQuery);
+            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
 
         var taskList = await tasks.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
@@ -83,7 +83,7 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
             .Where(t => !t.IsCompleted && t.DueDate < DateTime.UtcNow);
 
         if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title == searchQuery);
+            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
 
         var taskList = await tasks.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
