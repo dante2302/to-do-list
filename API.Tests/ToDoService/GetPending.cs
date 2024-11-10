@@ -12,8 +12,9 @@ public class ToDoService__GetPending : IDisposable
 
     public ToDoService__GetPending()
     {
+        var randomString = Path.GetRandomFileName().Replace(".", "")[..30];
         var options = new DbContextOptionsBuilder<ToDoDbContext>()
-            .UseInMemoryDatabase(databaseName: "ToDoDbTest_Specific")
+            .UseInMemoryDatabase(databaseName: randomString)
             .Options;
 
         _dbContext = new ToDoDbContext(options);

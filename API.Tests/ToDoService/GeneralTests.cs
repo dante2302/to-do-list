@@ -4,15 +4,16 @@ using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Tests;
-public class ToDoService_GeneralTests : IDisposable
+public class ToDoService__GeneralTests : IDisposable
 {
     private readonly ToDoDbContext _dbContext;
     private readonly ToDoService _toDoService;
 
-    public ToDoService_GeneralTests()
+    public ToDoService__GeneralTests()
     {
+        var randomString = Path.GetRandomFileName().Replace(".", "")[..30];
         var options = new DbContextOptionsBuilder<ToDoDbContext>()
-            .UseInMemoryDatabase(databaseName: "ToDoDbTest_Generic")
+            .UseInMemoryDatabase(databaseName: randomString)
             .Options;
 
         _dbContext = new ToDoDbContext(options);
