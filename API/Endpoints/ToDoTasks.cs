@@ -1,6 +1,7 @@
 using API.Models;
 using API.Services;
 using API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Endpoints;
 
@@ -33,22 +34,35 @@ public static class ToDoTasks
                 : Results.NotFound(result.Message);
         });
 
-        toDoTasks.MapGet("/pending", async (IToDoService service) => {
-            ServiceResult<List<ToDoTask>> result = await service.GetPendingTasks();
+        toDoTasks.MapGet("/pending", async (
+            IToDoService service, 
+            [FromQuery(Name = "title")]string? query
+        ) => 
+        {
+            ServiceResult<List<ToDoTask>> result = await service.GetPendingTasks(query);
+
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);
         });
 
-        toDoTasks.MapGet("/completed", async (IToDoService service) => {
-            ServiceResult<List<ToDoTask>> result = await service.GetCompletedTasks();
+        toDoTasks.MapGet("/completed", async (
+            IToDoService service, 
+            [FromQuery(Name = "title")]string? query
+        ) => 
+        {
+            ServiceResult<List<ToDoTask>> result = await service.GetCompletedTasks(query);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);
         });
 
-        toDoTasks.MapGet("/overdue", async (IToDoService service) => {
-            ServiceResult<List<ToDoTask>> result = await service.GetOverdueTasks();
+        toDoTasks.MapGet("/overdue", async (
+            IToDoService service, 
+            [FromQuery(Name = "title")]string? query
+        ) => 
+        {
+            ServiceResult<List<ToDoTask>> result = await service.GetOverdueTasks(query);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);

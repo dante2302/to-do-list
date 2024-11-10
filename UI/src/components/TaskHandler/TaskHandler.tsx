@@ -18,8 +18,8 @@ export default function TaskHandler() {
         useLocalStorage<TaskStatus>("LastDisplayedTaskStatus", TaskStatus.Pending);
 
     const [
-        taskCache, 
-        setTaskCache, 
+        taskCache,
+        setTaskCache,
         cleanOnCompletion,
         cleanAlreadyCompleted,
         cacheNew,
@@ -31,14 +31,11 @@ export default function TaskHandler() {
 
     const [hasError, setHasError] = useState(false);
 
-    useEffect(() => {
-        fetchTasksWithLoading();
-    }, [displayedTaskStatus]);
+    useEffect(() => {fetchTasksWithLoading();}, [displayedTaskStatus]);
 
 
-    const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) =>
-    {
-        const updatedList = list.map(task => 
+    const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) => {
+        const updatedList = list.map(task =>
             task.id === updatedTask.id ? updatedTask : task
         );
         return updatedList;
@@ -46,30 +43,24 @@ export default function TaskHandler() {
 
     const updateTaskCompletion = (updatedTask: ToDoTask) => {
         setTaskData(prevTasks => updateTaskCompletionList(prevTasks, updatedTask));
-        updatedTask.isCompleted 
-            ? cleanOnCompletion(updatedTask) 
+        updatedTask.isCompleted
+            ? cleanOnCompletion(updatedTask)
             : cleanAlreadyCompleted(updatedTask);
     }
 
-    const displayNewTask = (newTask: ToDoTask) => 
-    {
-        if(displayedTaskStatus == "all" || displayedTaskStatus == "pending")
+    const displayNewTask = (newTask: ToDoTask) => {
+        if (displayedTaskStatus == "all" || displayedTaskStatus == "pending")
             setTaskData(prevTasks => ([
                 ...prevTasks,
                 newTask
             ]));
     }
 
-    const deleteTask = async (task: ToDoTask) => 
-    {
+    const deleteTask = async (task: ToDoTask) => {
         setTaskData(taskData.filter(t => t.id != task.id));
         removeFromCache(task);
         toDoService._delete(task.id);
     }
-
-    // useEffect(() => {
-    //     console.log(taskData);
-    // }, [taskData])
 
     const fetchTasks = () => {
         const cachedTasks = taskCache[displayedTaskStatus];
@@ -83,6 +74,7 @@ export default function TaskHandler() {
                     setHasError(true);
                     return;
                 }
+
                 if (serviceResponse.data && serviceResponse.data.length) {
                     setTaskData(serviceResponse.data);
                     setTaskCache(prev => ({
@@ -90,6 +82,9 @@ export default function TaskHandler() {
                         [displayedTaskStatus]: serviceResponse.data
                     }))
                 }
+
+                else
+                    setTaskData([]);
             })();
         }
     }
@@ -97,49 +92,52 @@ export default function TaskHandler() {
     const [LoadingSpinner, fetchTasksWithLoading, isLoading] = useLoadingSpinner(fetchTasks);
     return (
         <>
-        <div className="outer-wrap">
-            <div className="outer-container">
-                <div className="upper-container">
-                <h1>TransferMate To Do List</h1>
-                    <Searchbar />
-                    <StatusHandler 
-                        displayedTaskStatus={displayedTaskStatus} 
-                        setDisplayedTaskStatus={setDisplayedTaskStatus}
-                    >
-                        <AddButton 
-                            cacheNewTask={cacheNew}
-                            displayNewTask={displayNewTask}
+            <div className="outer-wrap">
+                <div className="outer-container">
+                    <div className="upper-container">
+                        <h1>TransferMate To Do List</h1>
+                        <Searchbar 
+                            taskData={taskData}
+                            setTaskData={setTaskData}
                         />
-   
-                    </StatusHandler>
-                </div>
-                {hasError 
-                    ? 
-                    <h2>Something Went Wrong. Try Again Later</h2>
-                    :
-                <div className="lower-container">
-                    {taskData.length
-                        ?
-                        taskData.map(task =>
-                            <Task
-                                key={task.id}
-                                taskData={task}
-                                updateTask={updateTaskCompletion}
-                                deleteTask={deleteTask}
+                        <StatusHandler
+                            displayedTaskStatus={displayedTaskStatus}
+                            setDisplayedTaskStatus={setDisplayedTaskStatus}
+                        >
+                            <AddButton
+                                cacheNewTask={cacheNew}
+                                displayNewTask={displayNewTask}
                             />
-                        )
+
+                        </StatusHandler>
+                    </div>
+                    {hasError
+                        ?
+                        <h2>Something Went Wrong. Try Again Later</h2>
                         :
-                        isLoading ? 
-                        <LoadingSpinner size={15}/>
-                        :
-                        <p 
-                            className="no-tasks"
-                        >You have no {displayedTaskStatus == "all" ? "" : displayedTaskStatus } tasks.</p>
+                        <div className="lower-container">
+                            {taskData.length
+                                ?
+                                taskData.map(task =>
+                                    <Task
+                                        key={task.id}
+                                        taskData={task}
+                                        updateTask={updateTaskCompletion}
+                                        deleteTask={deleteTask}
+                                    />
+                                )
+                                :
+                                isLoading ?
+                                    <LoadingSpinner size={15} />
+                                    :
+                                    <p
+                                        className="no-tasks"
+                                    >You have no {displayedTaskStatus == "all" ? "" : displayedTaskStatus} tasks.</p>
+                            }
+                        </div>
                     }
                 </div>
-                }
             </div>
-        </div>
-</>
+        </>
     );
 }

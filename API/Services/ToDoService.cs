@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using API.Data;
 using API.Models;
 using API.Services.Interfaces;
@@ -40,31 +41,52 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         return ServiceResult<List<ToDoTask>>.Success(tasks);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetPendingTasks()
+    public async Task<ServiceResult<List<ToDoTask>>> GetAll(string? searchQuery)
     {
-        var tasks = await _dbContext.Tasks
-            .Where(t => !t.IsCompleted && (t.DueDate == null || t.DueDate >= DateTime.UtcNow))
-            .ToListAsync();
+        var tasks = string.IsNullOrEmpty(searchQuery)
+            ?  
+            await _dbContext.Tasks.ToListAsync()
+            :
+            await _dbContext.Tasks
+                .Where(t => t.Title == searchQuery)
+                .ToListAsync();
 
         return ServiceResult<List<ToDoTask>>.Success(tasks);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetCompletedTasks()
+    public async Task<ServiceResult<List<ToDoTask>>> GetPendingTasks(string? searchQuery)
     {
-        var tasks = await _dbContext.Tasks
-            .Where(t => t.IsCompleted)
-            .ToListAsync();
+        var tasks =  _dbContext.Tasks
+            .Where(t => !t.IsCompleted && (t.DueDate == null || t.DueDate >= DateTime.UtcNow));
 
-        return ServiceResult<List<ToDoTask>>.Success(tasks);
+        if(!string.IsNullOrEmpty(searchQuery))
+            tasks = tasks.Where(t => t.Title == searchQuery);
+
+        var taskList = await tasks.ToListAsync();
+        return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetOverdueTasks()
+    public async Task<ServiceResult<List<ToDoTask>>> GetCompletedTasks(string? searchQuery)
     {
-        var tasks = await _dbContext.Tasks
-            .Where(t => !t.IsCompleted && t.DueDate < DateTime.UtcNow)
-            .ToListAsync();
+        var tasks =  _dbContext.Tasks
+            .Where(t => t.IsCompleted);
+        if(!string.IsNullOrEmpty(searchQuery))
+            tasks = tasks.Where(t => t.Title == searchQuery);
 
-        return ServiceResult<List<ToDoTask>>.Success(tasks);
+        var taskList = await tasks.ToListAsync();
+        return ServiceResult<List<ToDoTask>>.Success(taskList);
+    }
+
+    public async Task<ServiceResult<List<ToDoTask>>> GetOverdueTasks(string? searchQuery)
+    {
+        var tasks =  _dbContext.Tasks
+            .Where(t => !t.IsCompleted && t.DueDate < DateTime.UtcNow);
+
+        if(!string.IsNullOrEmpty(searchQuery))
+            tasks = tasks.Where(t => t.Title == searchQuery);
+
+        var taskList = await tasks.ToListAsync();
+        return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
     public async Task<ServiceResult<ToDoTask>> Update(ToDoTask updatedTask)

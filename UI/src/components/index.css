@@ -19,7 +19,12 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  background: linear-gradient(to bottom right, lightblue, rgb(0, 102, 255));
+  padding: 0;
+  height: fit-content;
+}
+
+html{
+  height: fit-content;
 }
 
 img, picture, video, canvas, svg {
