@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using API.Data;
 using API.Helpers;
 using API.Models;
@@ -37,13 +36,10 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         return ServiceResult<ToDoTask>.Success(task);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetAll()
-    {
-        var tasks = await _dbContext.Tasks.ToListAsync();
-        return ServiceResult<List<ToDoTask>>.Success(tasks);
-    }
-
-    public async Task<ServiceResult<List<ToDoTask>>> GetAll(string? search, string? orderBy, string? orderDir)
+    public async Task<ServiceResult<List<ToDoTask>>> GetAll(
+        string? search=null, 
+        string? orderBy=null, 
+        string? orderDir=null)
     {
         var tasksQuery = _dbContext.Tasks.AsQueryable();
         ServiceResult<IQueryable<ToDoTask>> res = SearchAndSortTasks(tasksQuery, search, orderBy, orderDir);
@@ -54,9 +50,9 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
     }
 
     public async Task<ServiceResult<List<ToDoTask>>> GetPendingTasks(
-        string? search, 
-        string? orderBy, 
-        string? orderDir
+        string? search=null, 
+        string? orderBy=null, 
+        string? orderDir=null
     )
     {
         var tasksQuery =  _dbContext.Tasks
@@ -69,9 +65,9 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
     }
 
     public async Task<ServiceResult<List<ToDoTask>>> GetCompletedTasks(
-        string? search, 
-        string? orderBy, 
-        string? orderDir
+        string? search=null, 
+        string? orderBy=null, 
+        string? orderDir=null
     )
     {
         var tasksQuery =  _dbContext.Tasks
@@ -86,9 +82,9 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
     }
 
     public async Task<ServiceResult<List<ToDoTask>>> GetOverdueTasks(
-        string? search, 
-        string? orderBy, 
-        string? orderDir
+        string? search=null, 
+        string? orderBy=null, 
+        string? orderDir=null
     )
     {
         var tasksQuery =  _dbContext.Tasks

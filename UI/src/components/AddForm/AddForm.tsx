@@ -7,7 +7,6 @@ import * as toDoService from "../../services/toDoService";
 import { ToDoSubmission } from "../../interfaces/ToDoSubmission";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import { getNearest10MinuteInterval } from "../../utils/dateUtils";
-import useToDoCache from "../../hooks/useToDoCache";
 import { STATUS } from "../../enums/Status";
 import ToDoTask from "../../interfaces/ToDoTask";
 

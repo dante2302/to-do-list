@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ToDoDbContext>(options => {
     string connectionString = Configuration.Manager.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidDataException("No connection string");
+    ?? throw new InvalidDataException("Invalid Connection String!");
 
     options.UseNpgsql(connectionString, ef => ef.MigrationsAssembly("API"));
 });
@@ -39,5 +39,12 @@ if(app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
+    db.Database.Migrate();
+}
+
 app.RegisterToDoTasksEndpoints();
 app.Run();

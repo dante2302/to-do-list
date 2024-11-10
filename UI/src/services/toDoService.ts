@@ -4,6 +4,8 @@ import { TaskStatus } from "../enums/TaskStatus";
 import { ToDoSubmission } from "../interfaces/ToDoSubmission";
 import ToDoTask from "../interfaces/ToDoTask";
 import * as request from "./request";
+
+console.log(import.meta.env);
 const BASE_URL = import.meta.env.VITE_API_URL;
 const TODO_URL = `${BASE_URL}/todos`
 

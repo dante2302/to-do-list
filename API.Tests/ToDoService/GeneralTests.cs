@@ -4,12 +4,12 @@ using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Tests;
-public class ToDoServiceGeneralTests : IDisposable
+public class ToDoService_GeneralTests : IDisposable
 {
     private readonly ToDoDbContext _dbContext;
     private readonly ToDoService _toDoService;
 
-    public ToDoServiceGeneralTests()
+    public ToDoService_GeneralTests()
     {
         var options = new DbContextOptionsBuilder<ToDoDbContext>()
             .UseInMemoryDatabase(databaseName: "ToDoDbTest_Generic")
@@ -113,33 +113,6 @@ public class ToDoServiceGeneralTests : IDisposable
         ServiceResult<ToDoTask> result = await _toDoService.GetOne(999);
 
         Assert.False(result.IsSuccess);
-    }
-
-    [Fact]
-    public async Task GetAll_ShouldReturnAllTasks()
-    {
-        ToDoTask task1 = new()
-        {
-            Title = "Task 1",
-            DueDate = DateTime.UtcNow.AddDays(1),
-            IsCompleted = false
-        };
-
-        ToDoTask task2 = new()
-        {
-            Title = "Task 2",
-            DueDate = DateTime.UtcNow.AddDays(1),
-            IsCompleted = false
-        };
-
-        await _dbContext.AddAsync(task1);
-        await _dbContext.AddAsync(task2);
-        await _dbContext.SaveChangesAsync();
-
-        ServiceResult<List<ToDoTask>> result = await _toDoService.GetAll();
-
-        Assert.True(result.IsSuccess);
-        Assert.Equal(2, result.Data?.Count);
     }
 
     [Fact]

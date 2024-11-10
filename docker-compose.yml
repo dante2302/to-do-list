@@ -1,0 +1,37 @@
+networks:
+  app-network: 
+    driver: bridge
+
+services:
+  frontend:
+    build:
+      context: ./UI
+      dockerfile: Dockerfile.ui
+    ports:
+      - "5173:80"  
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./API
+      dockerfile: Dockerfile.api  
+    ports:
+      - "5180:80" 
+    networks:
+      - app-network
+    environment:
+      aspnetcore_urls: "http://+:80"  
+      connectionstrings__defaultconnection: "Host=db;Database=transfermate;Username=darin;Password=darinesuper" 
+      aspnetcore_environment: "development"  
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: darin
+      POSTGRES_PASSWORD: darinesuper 
+      POSTGRES_DB: transfermate 
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network

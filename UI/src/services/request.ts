@@ -33,7 +33,7 @@ export const put = async (url: string, updatedData: object) => {
 }
 
 export const _delete = async (url: string) => {
-  let response = await fetch(url,{
+  const response = await fetch(url,{
     'method': 'DELETE',
     'headers':{
       "Content-Type": "application/json"
