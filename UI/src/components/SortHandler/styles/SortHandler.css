@@ -7,12 +7,37 @@
     flex-direction: column;
     justify-content: center;
     background: white;
-    border: 1px solid black;
+    border: 1px solid grey;
+    border-radius: 5px;
     display: none;
     z-index: 1;
     position: absolute;
+    padding: 10px 20px;
+    right: 0;
+    width: 200px;
+    margin-top: 10px;
 }
 
 .sort-options.active{
     display:flex;
+}
+
+.sort-option{
+    cursor: pointer;
+    text-transform: capitalize;
+
+}
+
+.sort-option>span{
+    margin-left: 20px;
+    color: var(--clr-accent-blue);
+}
+.sort-option.active{
+    color: var(--clr-accent-blue);
+    font-weight: bold;
+}
+
+.sort-options-heading{
+    color: grey;
+    pointer-events: none;
 }

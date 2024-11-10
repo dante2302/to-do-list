@@ -12,7 +12,6 @@ import useToDoCache from "../../hooks/useToDoCache";
 import AddButton from "../AddButton/AddButton";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import * as toDoService from "../../services/toDoService";
-import { set } from "react-datepicker/dist/date_utils";
 import SortHandler from "../SortHandler/SortHandler";
 
 export default function TaskHandler() {
@@ -36,16 +35,12 @@ export default function TaskHandler() {
 
     useEffect(() => {fetchTasksWithLoading();}, [displayedTaskStatus, isSearching]);
 
-
-    const updateTaskCompletionList = (list: ToDoTask[], updatedTask: ToDoTask) => {
-        const updatedList = list.map(task =>
-            task.id === updatedTask.id ? updatedTask : task
-        );
-        return updatedList;
-    }
-
     const updateTaskCompletion = (updatedTask: ToDoTask) => {
-        setTaskData(prevTasks => updateTaskCompletionList(prevTasks, updatedTask));
+        setTaskData(prevTasks => 
+            prevTasks.map(task => 
+                task.id === updatedTask.id ? updatedTask : task
+        ));
+
         updatedTask.isCompleted
             ? cleanOnCompletion(updatedTask)
             : cleanAlreadyCompleted(updatedTask);

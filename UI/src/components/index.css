@@ -20,7 +20,8 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   padding: 0;
-  height: fit-content;
+  height: 100vh;
+  overflow: hidden;
 }
 
 html{
@@ -50,4 +51,8 @@ h1, h2, h3, h4, h5, h6 {
 
 #root, #__next {
   isolation: isolate;
+}
+
+#root{
+  max-height: 100vh;
 }

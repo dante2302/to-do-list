@@ -2,6 +2,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.outer-wrap, .outer-container{
+    max-height: 100vh;
 }
 
 .outer-container{
@@ -49,10 +55,7 @@
     margin-bottom: 40px;
 }
 
-.outer-wrap{
-    margin: 0 auto;
-    margin-top: 50px;
-}
+
 
 @media(max-width: 768px)
 {
@@ -64,4 +67,9 @@
     .upper-container>h1{
         font-size: 30px;
     }
+}
+
+.lower-container{
+    overflow-y: scroll;
+    overflow: auto;
 }

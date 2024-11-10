@@ -1,7 +1,6 @@
-import React, { Children, PropsWithChildren } from "react";
+import React, { PropsWithChildren } from "react";
 import { TaskStatus } from "../../enums/TaskStatus";
 import "./StatusHandler.css"
-import AddButton from "../AddButton/AddButton";
 interface props extends PropsWithChildren
 {
     displayedTaskStatus: TaskStatus,

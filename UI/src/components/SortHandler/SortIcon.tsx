@@ -1,6 +1,5 @@
 import React from "react";
 import "./styles/SortIcon.css";
-import useOutsideClick from "../../hooks/useOutsideClick";
 interface SortIconProps
 {
     className: string
@@ -8,9 +7,7 @@ interface SortIconProps
 }
 export default function SortIcon({className, toggleSort}: SortIconProps)
 {
-    const outsideClickRef = useOutsideClick<SVGSVGElement>(() => toggleSort(false));
     return <svg 
-                ref={outsideClickRef}
                 onClick={() => toggleSort(prev => !prev)} 
                 className={`${className} sort-icon`} 
                 fill="#000000" 
