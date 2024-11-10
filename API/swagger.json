@@ -1,0 +1,369 @@
+{
+  "swagger": "2.0",
+  "base_url": "/api/todos",
+  "description": "The ToDoTasks class provides a set of endpoints for managing to-do tasks, allowing you to perform CRUD operations and query tasks based on different states (pending, completed, overdue). Below is a detailed description of each endpoint.",
+  "endpoints": [
+    {
+      "path": "/",
+      "method": "POST",
+      "description": "Creates a new To-Do task.",
+      "request_body": {
+        "type": "application/json",
+        "content": {
+          "example": {
+            "title": "Task title",
+            "description": "Task description",
+            "dueDate": "2024-11-15T12:00:00Z",
+            "status": "Pending"
+          }
+        }
+      },
+      "responses": [
+        {
+          "code": 201,
+          "description": "Task was successfully created.",
+          "content": {
+            "application/json": {
+              "example": {
+                "id": 1,
+                "title": "Task title",
+                "description": "Task description",
+                "dueDate": "2024-11-15T12:00:00Z",
+                "status": "Pending"
+              }
+            }
+          }
+        },
+        {
+          "code": 400,
+          "description": "Invalid input or task creation failed.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Invalid input data"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/all",
+      "method": "GET",
+      "description": "Retrieves a list of all to-do tasks.",
+      "query_parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderBy",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderDir",
+          "type": "string",
+          "required": false,
+          "enum": ["asc", "desc"]
+        }
+      ],
+      "responses": [
+        {
+          "code": 200,
+          "description": "A list of all tasks matching the query parameters.",
+          "content": {
+            "application/json": {
+              "example": [
+                {
+                  "id": 1,
+                  "title": "Task title",
+                  "description": "Task description",
+                  "dueDate": "2024-11-15T12:00:00Z",
+                  "status": "Pending"
+                },
+                {
+                  "id": 2,
+                  "title": "Another Task",
+                  "description": "Another description",
+                  "dueDate": "2024-11-20T12:00:00Z",
+                  "status": "Completed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "code": 400,
+          "description": "Invalid query or failed retrieval.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Invalid query parameters"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/{id}",
+      "method": "GET",
+      "description": "Retrieves a single task by its ID.",
+      "responses": [
+        {
+          "code": 200,
+          "description": "The task details.",
+          "content": {
+            "application/json": {
+              "example": {
+                "id": 1,
+                "title": "Task title",
+                "description": "Task description",
+                "dueDate": "2024-11-15T12:00:00Z",
+                "status": "Pending"
+              }
+            }
+          }
+        },
+        {
+          "code": 404,
+          "description": "Task not found.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Task not found"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/pending",
+      "method": "GET",
+      "description": "Retrieves all tasks that are pending.",
+      "query_parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderBy",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderDir",
+          "type": "string",
+          "required": false,
+          "enum": ["asc", "desc"]
+        }
+      ],
+      "responses": [
+        {
+          "code": 200,
+          "description": "A list of pending tasks.",
+          "content": {
+            "application/json": {
+              "example": [
+                {
+                  "id": 1,
+                  "title": "Pending Task",
+                  "description": "Task description",
+                  "dueDate": "2024-11-15T12:00:00Z",
+                  "status": "Pending"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "code": 400,
+          "description": "Invalid query or failed retrieval.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Invalid query parameters"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/completed",
+      "method": "GET",
+      "description": "Retrieves all tasks that are completed.",
+      "query_parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderBy",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderDir",
+          "type": "string",
+          "required": false,
+          "enum": ["asc", "desc"]
+        }
+      ],
+      "responses": [
+        {
+          "code": 200,
+          "description": "A list of completed tasks.",
+          "content": {
+            "application/json": {
+              "example": [
+                {
+                  "id": 2,
+                  "title": "Completed Task",
+                  "description": "Task description",
+                  "dueDate": "2024-11-10T12:00:00Z",
+                  "status": "Completed"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "code": 400,
+          "description": "Invalid query or failed retrieval.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Invalid query parameters"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/overdue",
+      "method": "GET",
+      "description": "Retrieves all tasks that are overdue.",
+      "query_parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderBy",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "orderDir",
+          "type": "string",
+          "required": false,
+          "enum": ["asc", "desc"]
+        }
+      ],
+      "responses": [
+        {
+          "code": 200,
+          "description": "A list of overdue tasks.",
+          "content": {
+            "application/json": {
+              "example": [
+                {
+                  "id": 3,
+                  "title": "Overdue Task",
+                  "description": "Task description",
+                  "dueDate": "2024-11-01T12:00:00Z",
+                  "status": "Overdue"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "code": 400,
+          "description": "Invalid query or failed retrieval.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Invalid query parameters"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/{id}",
+      "method": "PUT",
+      "description": "Updates an existing task by its ID.",
+      "request_body": {
+        "type": "application/json",
+        "content": {
+          "example": {
+            "title": "Updated task title",
+            "description": "Updated task description",
+            "dueDate": "2024-11-25T12:00:00Z",
+            "status": "Completed"
+          }
+        }
+      },
+      "responses": [
+        {
+          "code": 200,
+          "description": "Task successfully updated.",
+          "content": {
+            "application/json": {
+              "example": {
+                "id": 1,
+                "title": "Updated task title",
+                "description": "Updated task description",
+                "dueDate": "2024-11-25T12:00:00Z",
+                "status": "Completed"
+              }
+            }
+          }
+        },
+        {
+          "code": 404,
+          "description": "Task not found.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Task not found"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "/{id}",
+      "method": "DELETE",
+      "description": "Deletes a task by its ID.",
+      "responses": [
+        {
+          "code": 204,
+          "description": "Task successfully deleted."
+        },
+        {
+          "code": 400,
+          "description": "Deletion failed.",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "Deletion failed"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

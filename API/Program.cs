@@ -29,7 +29,6 @@ builder.Services.AddScoped<IToDoService, ToDoService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
 app.UseCors("AllowFrontendApp");
@@ -37,7 +36,10 @@ app.UseCors("AllowFrontendApp");
 if(app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(o => {
+        o.SwaggerEndpoint("/swagger/v1/swagger.json", "To Do List");
+        o.RoutePrefix = string.Empty;
+    });
 }
 
 using (var scope = app.Services.CreateScope())

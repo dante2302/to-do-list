@@ -5,7 +5,6 @@ import { ToDoSubmission } from "../interfaces/ToDoSubmission";
 import ToDoTask from "../interfaces/ToDoTask";
 import * as request from "./request";
 
-console.log(import.meta.env);
 const BASE_URL = import.meta.env.VITE_API_URL;
 const TODO_URL = `${BASE_URL}/todos`
 
@@ -47,7 +46,6 @@ export async function getOne(id: number)
     }
     catch(e)
     {
-        console.log(e);
         return { 
             data: null, 
             status: STATUS.Error 
@@ -69,7 +67,6 @@ export async function getAllByStatus(
             ${order ? ((title ? "&" : "?" ) + "orderBy=" + order) : ""}
             ${orderDir ? ((title || order) ? "&" : "?") + "orderDir=" + orderDir : ""}`;
         url = url.replace(/\s+/g, '')
-        console.log(url);
 
         const response = await request.get(url);
         let data: ToDoTask[] = await response.json();

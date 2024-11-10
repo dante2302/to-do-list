@@ -16,7 +16,11 @@ import SortHandler from "../SortHandler/SortHandler";
 import { SortDirection, SortGroup } from "../../enums/SortGroup";
 
 export default function TaskHandler() {
-    const [isInitialRender, setIsInitialRender] = useState(true);
+    const [isInitialRender, setIsInitialRender] = useState(
+        Object.fromEntries(
+        Object.values(TaskStatus).map((key) => [key, true])
+    ));
+
     const [displayedTaskStatus, setDisplayedTaskStatus] =
         useLocalStorage<TaskStatus>("LastDisplayedTaskStatus", TaskStatus.Pending);
 
@@ -40,7 +44,6 @@ export default function TaskHandler() {
     const [isSearching, setIsSearching] = useState(false);
 
     useEffect(() => {fetchTasksWithLoading();}, [displayedTaskStatus, isSearching]);
-
     const updateTaskCompletion = (updatedTask: ToDoTask) => {
         setTaskData(prevTasks => 
             prevTasks.map(task => 
@@ -68,9 +71,16 @@ export default function TaskHandler() {
 
     const fetchTasks = () => {
         if(isSearching) return;
+
         const cachedTasks = taskCache[displayedTaskStatus];
-        if (cachedTasks && cachedTasks.length) {
-            setTaskData(cachedTasks);
+        // Javascript way of logical XOR
+        // of cachedTasks && cachedTasks.length XOR !isInitialRender
+        if ((!!cachedTasks && !!cachedTasks.length)
+            && (!isInitialRender[displayedTaskStatus])
+        ) 
+        {
+                setTaskData(cachedTasks);
+                return;
         }
         else {
             (async () => {
@@ -97,7 +107,7 @@ export default function TaskHandler() {
                     setTaskData([]);
             })();
         }
-        setIsInitialRender(false);
+        setIsInitialRender(obj => ({...obj, [displayedTaskStatus]: false}));
     }
 
     const [LoadingSpinner, fetchTasksWithLoading, isLoading] = useLoadingSpinner(fetchTasks);
@@ -150,8 +160,8 @@ export default function TaskHandler() {
                                     />
                                 )
                                 :
-                                isLoading || isInitialRender ?
-                                    <LoadingSpinner size={15} />
+                                isLoading ?
+                                    <LoadingSpinner size={45} />
                                     :
                                     <p
                                         className="no-tasks"
