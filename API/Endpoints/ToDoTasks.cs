@@ -21,10 +21,12 @@ public static class ToDoTasks
 
         toDoTasks.MapGet("/all", async (
             IToDoService service, 
-            [FromQuery(Name = "title")]string? query
+            [FromQuery(Name = "title")]string? searchQuery,
+            [FromQuery(Name = "orderBy")] string? sort,
+            [FromQuery(Name = "orderDir")]string ? orderDir
         ) => 
         {
-            ServiceResult<List<ToDoTask>> result = await service.GetAll(query);
+            ServiceResult<List<ToDoTask>> result = await service.GetAll(searchQuery, sort, orderDir);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);
@@ -40,11 +42,12 @@ public static class ToDoTasks
 
         toDoTasks.MapGet("/pending", async (
             IToDoService service, 
-            [FromQuery(Name = "title")]string? query
+            [FromQuery(Name = "title")]string? searchQuery,
+            [FromQuery(Name = "orderBy")] string? sort,
+            [FromQuery(Name = "orderDir")]string ? orderDir
         ) => 
         {
-            ServiceResult<List<ToDoTask>> result = await service.GetPendingTasks(query);
-
+            ServiceResult<List<ToDoTask>> result = await service.GetPendingTasks(searchQuery, sort, orderDir);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);
@@ -52,10 +55,12 @@ public static class ToDoTasks
 
         toDoTasks.MapGet("/completed", async (
             IToDoService service, 
-            [FromQuery(Name = "title")]string? query
+            [FromQuery(Name = "title")]string? searchQuery,
+            [FromQuery(Name = "orderBy")] string? sort,
+            [FromQuery(Name = "orderDir")]string ? orderDir
         ) => 
         {
-            ServiceResult<List<ToDoTask>> result = await service.GetCompletedTasks(query);
+            ServiceResult<List<ToDoTask>> result = await service.GetCompletedTasks(searchQuery, sort, orderDir);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);
@@ -63,10 +68,12 @@ public static class ToDoTasks
 
         toDoTasks.MapGet("/overdue", async (
             IToDoService service, 
-            [FromQuery(Name = "title")]string? query
+            [FromQuery(Name = "title")]string? searchQuery,
+            [FromQuery(Name = "orderBy")] string? sort,
+            [FromQuery(Name = "orderDir")]string ? orderDir
         ) => 
         {
-            ServiceResult<List<ToDoTask>> result = await service.GetOverdueTasks(query);
+            ServiceResult<List<ToDoTask>> result = await service.GetOverdueTasks(searchQuery, sort, orderDir);
             return result.IsSuccess
                 ? Results.Ok(result.Data)
                 : Results.BadRequest(result.Message);

@@ -1,11 +1,13 @@
 using System.Linq.Expressions;
 using API.Data;
+using API.Helpers;
 using API.Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services;
 
+#pragma warning disable
 public class ToDoService(ToDoDbContext dbContext) : IToDoService
 {
     private readonly ToDoDbContext _dbContext = dbContext;
@@ -41,51 +43,63 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         return ServiceResult<List<ToDoTask>>.Success(tasks);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetAll(string? searchQuery)
+    public async Task<ServiceResult<List<ToDoTask>>> GetAll(string? search, string? orderBy, string? orderDir)
     {
-        var tasks = string.IsNullOrEmpty(searchQuery)
-            ?  
-            await _dbContext.Tasks.ToListAsync()
-            :
-            await _dbContext.Tasks
-                .Where(t => t.Title.Contains(searchQuery))
-                .ToListAsync();
-
-        return ServiceResult<List<ToDoTask>>.Success(tasks);
+        var tasksQuery = _dbContext.Tasks.AsQueryable();
+        ServiceResult<IQueryable<ToDoTask>> res = SearchAndSortTasks(tasksQuery, search, orderBy, orderDir);
+        if(!res.IsSuccess)
+            return ServiceResult<List<ToDoTask>>.Failure(res.Message);
+        var taskList = await res.Data.ToListAsync();
+        return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetPendingTasks(string? searchQuery)
+    public async Task<ServiceResult<List<ToDoTask>>> GetPendingTasks(
+        string? search, 
+        string? orderBy, 
+        string? orderDir
+    )
     {
-        var tasks =  _dbContext.Tasks
+        var tasksQuery =  _dbContext.Tasks
             .Where(t => !t.IsCompleted && (t.DueDate == null || t.DueDate >= DateTime.UtcNow));
-
-        if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
-
-        var taskList = await tasks.ToListAsync();
+        ServiceResult<IQueryable<ToDoTask>> res = SearchAndSortTasks(tasksQuery, search, orderBy, orderDir);
+        if(!res.IsSuccess)
+            return ServiceResult<List<ToDoTask>>.Failure(res.Message);
+        var taskList = await res.Data.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetCompletedTasks(string? searchQuery)
+    public async Task<ServiceResult<List<ToDoTask>>> GetCompletedTasks(
+        string? search, 
+        string? orderBy, 
+        string? orderDir
+    )
     {
-        var tasks =  _dbContext.Tasks
+        var tasksQuery =  _dbContext.Tasks
             .Where(t => t.IsCompleted);
-        if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
+        ServiceResult<IQueryable<ToDoTask>> res = SearchAndSortTasks(tasksQuery, search, orderBy, orderDir);
 
-        var taskList = await tasks.ToListAsync();
+        if(!res.IsSuccess)
+            return ServiceResult<List<ToDoTask>>.Failure(res.Message);
+
+        var taskList = await res.Data.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
-    public async Task<ServiceResult<List<ToDoTask>>> GetOverdueTasks(string? searchQuery)
+    public async Task<ServiceResult<List<ToDoTask>>> GetOverdueTasks(
+        string? search, 
+        string? orderBy, 
+        string? orderDir
+    )
     {
-        var tasks =  _dbContext.Tasks
+        var tasksQuery =  _dbContext.Tasks
             .Where(t => !t.IsCompleted && t.DueDate < DateTime.UtcNow);
 
-        if(!string.IsNullOrEmpty(searchQuery))
-            tasks = tasks.Where(t => t.Title.Contains(searchQuery));
+        ServiceResult<IQueryable<ToDoTask>> res = SearchAndSortTasks(tasksQuery, search, orderBy, orderDir);
 
-        var taskList = await tasks.ToListAsync();
+        if(!res.IsSuccess)
+            return ServiceResult<List<ToDoTask>>.Failure(res.Message);
+
+        var taskList = await res.Data.ToListAsync();
         return ServiceResult<List<ToDoTask>>.Success(taskList);
     }
 
@@ -117,4 +131,29 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         return ServiceResult<string>.Success("Task deleted successfully.");
     }
 
+    private static ServiceResult<IQueryable<ToDoTask>> SearchAndSortTasks(
+        IQueryable<ToDoTask> tasksQuery, 
+        string? search, 
+        string? orderBy, 
+        string? orderDir
+    )
+    {
+        if(!string.IsNullOrEmpty(search))
+            tasksQuery = tasksQuery.Where(t => t.Title.Contains(search));
+
+        if(!string.IsNullOrEmpty(orderBy))
+        {
+            try
+            {
+                bool descending = orderDir?.ToLower() == "descending";
+                tasksQuery = tasksQuery.OrderByDynamic(orderBy, descending);
+            }
+            catch(ArgumentException)
+            {
+                return ServiceResult<IQueryable<ToDoTask>>
+                    .Failure($"Property {orderBy} doesn't exist!");
+            }
+        }
+        return ServiceResult<IQueryable<ToDoTask>>.Success(tasksQuery);
+    }
 }
