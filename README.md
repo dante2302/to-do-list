@@ -12,7 +12,7 @@ A simple To Do List application built with the following technologies:
 ### [Linux Setup Guide](#linux-setup-guide) 🐧
 ### [API DOCUMENTATION](#api-documentation) 📝
 ### [Overview](#overview) 🔍
-- [API](#api)🔗
+- [API](#api) 🔗
 - [API TESTS](#api-tests) 🧪
 - [UI](#ui) 🖼️
 - [Docker](#docker) 📦
