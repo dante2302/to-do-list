@@ -13,6 +13,7 @@ import AddButton from "../AddButton/AddButton";
 import useLoadingSpinner from "../../hooks/useLoadingSpinner";
 import * as toDoService from "../../services/toDoService";
 import { set } from "react-datepicker/dist/date_utils";
+import SortHandler from "../SortHandler/SortHandler";
 
 export default function TaskHandler() {
     const [displayedTaskStatus, setDisplayedTaskStatus] =
@@ -99,12 +100,15 @@ export default function TaskHandler() {
                 <div className="outer-container">
                     <div className="upper-container">
                         <h1>TransferMate To Do List</h1>
+                        <div>
+
                         <Searchbar 
                             taskData={taskData}
                             setTaskData={setTaskData}
                             currentDisplayStatus={displayedTaskStatus}
                             setIsSearching={setIsSearching}
                         />
+                        </div>
                         <StatusHandler
                             displayedTaskStatus={displayedTaskStatus}
                             setDisplayedTaskStatus={setDisplayedTaskStatus}
@@ -113,6 +117,7 @@ export default function TaskHandler() {
                                 cacheNewTask={cacheNew}
                                 displayNewTask={displayNewTask}
                             />
+                        <SortHandler />
 
                         </StatusHandler>
                     </div>

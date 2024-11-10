@@ -1,0 +1,12 @@
+.sort-icon{
+    width: 35px;
+    height: 35px;
+    fill: gray;
+    cursor: pointer;
+    transition: .2s;
+    z-index: 2;
+}
+
+.sort-icon:hover, .sort-icon.active{
+    fill: var(--clr-accent-blue);
+}

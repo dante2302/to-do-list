@@ -145,7 +145,8 @@ public class ToDoService(ToDoDbContext dbContext) : IToDoService
         {
             try
             {
-                bool descending = orderDir?.ToLower() == "descending";
+                orderDir = orderDir?.ToLower();
+                bool descending =  orderDir == "descending" || orderDir == "desc";
                 tasksQuery = tasksQuery.OrderByDynamic(orderBy, descending);
             }
             catch(ArgumentException)

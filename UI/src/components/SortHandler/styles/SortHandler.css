@@ -1,0 +1,18 @@
+.sort-outer {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-options{
+    flex-direction: column;
+    justify-content: center;
+    background: white;
+    border: 1px solid black;
+    display: none;
+    z-index: 1;
+    position: absolute;
+}
+
+.sort-options.active{
+    display:flex;
+}

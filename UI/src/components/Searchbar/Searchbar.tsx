@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./Searchbar.css";
 import ToDoTask from "../../interfaces/ToDoTask";
 import { TaskStatus } from "../../enums/TaskStatus";
