@@ -10,12 +10,12 @@ A simple To Do List application built with the following technologies:
 
 ### [Windows Setup Guide](#windows-setup-guide) 🪟
 ### [Linux Setup Guide](#linux-setup-guide) 🐧
-### [API DOCUMENTATION](#api-documentation)📝
-### [Overview](#overview)🔍
+### [API DOCUMENTATION](#api-documentation) 📝
+### [Overview](#overview) 🔍
 - [API](#api)🔗
-- [API TESTS](#api-tests)🧪
-- [UI](#ui)🖼️
-- [Docker](#docker)📦
+- [API TESTS](#api-tests) 🧪
+- [UI](#ui) 🖼️
+- [Docker](#docker) 📦
 -----
 
 ## Windows Setup Guide  
