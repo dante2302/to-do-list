@@ -1,4 +1,4 @@
-# [📋 To Do List](https://aether-zeta.vercel.app)
+# 📋 To Do List
 A simple To Do List application built with the following technologies:
 - **C#** & **Entity Framework**
 - **React** & **TypeScript**
