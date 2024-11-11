@@ -13,6 +13,8 @@ services:
       - app-network
 
   backend:
+    depends_on:
+      - db
     build:
       context: ./API
       dockerfile: Dockerfile.api  

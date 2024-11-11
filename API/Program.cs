@@ -1,6 +1,7 @@
 using API;
 using API.Data;
 using API.Endpoints;
+using API.Middleware;
 using API.Services;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseCors("AllowFrontendApp");
+app.UseMiddleware<ExceptionHandler>();
 
 if(app.Environment.IsDevelopment())
 {

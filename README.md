@@ -112,7 +112,7 @@ A simple To Do List application built with the following technologies:
 - To start the services defined in the `docker-compose.yml` file, run the following command in the root of the project:
 
     ```bash
-    docker-compose up --build
+    sudo docker-compose up --build
     ```
 
     This will download any necessary images and start the containers according to the configuration in the `docker-compose.yml` file.
